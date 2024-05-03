@@ -1,3 +1,5 @@
+import io
+import zipfile
 import requests
 import os
 
@@ -8,12 +10,14 @@ class DownloadFileOptions:
         self.destination: str = destination
 
 
-async def download_file(options: DownloadFileOptions):
-    response = requests.get(options.url, stream=True)
+async def download_file(url):
+    folder_path = "tmp"
+    os.makedirs(folder_path, exist_ok=True)
+    response = requests.get(url)
+
     if response.status_code == 200:
-        filename = os.path.join(options.destination, os.path.basename(options.url))
-        with open(filename, "wb") as file:
-            file.write(response.content)
-        print(f"File downloaded and saved as {options.destination}")
+        with zipfile.ZipFile(io.BytesIO(response.content)) as zip_ref:
+            zip_ref.extractall(folder_path)
+        print("Zip file downloaded and extracted successfully!")
     else:
-        print(f"Error while downloading {options.url}")
+        print("Failed to download the zip file.")
