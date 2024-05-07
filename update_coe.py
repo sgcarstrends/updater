@@ -4,12 +4,12 @@ from typing import List
 
 
 async def main():
-    collection_name: str = "cars"
-    zip_file_name: str = "Monthly New Registration of Cars by Make.zip"
+    collection_name: str = "coe"
+    zip_file_name: str = "COE Bidding Results.zip"
     zip_url: str = (
         f"https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle Registration/{zip_file_name}"
     )
-    key_fields: List[str] = ["month"]
+    key_fields: List[str] = ["month", "bidding_no"]
 
     await updater.main(
         collection_name=collection_name,

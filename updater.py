@@ -1,19 +1,11 @@
-import asyncio
 import csv
 import datetime
 import os
 from zipfile import ZipFile
 from pymongo import MongoClient
-
 from download_file import download_file
 
 EXTRACT_PATH = "tmp"
-
-csv_file_path = "tmp/Monthly New Registration of Cars by Make/M03-Car_Regn_by_make.csv"
-
-json_file_path = (
-    "tmp/Monthly New Registration of Cars by Make/M03-Car_Regn_by_make.csv.json"
-)
 
 csv_data = []
 
@@ -25,7 +17,7 @@ async def update(collection_name, zip_file_name, zip_url, key_fields):
 
     try:
         zip_file_path = os.path.join(EXTRACT_PATH, zip_file_name)
-        await download_file(zip_url, zip_file_path)  # You'll need to define this
+        await download_file(zip_url, zip_file_path)
 
         extracted_file_name = extract_zip_file(zip_file_path, EXTRACT_PATH)
         destination_path = os.path.join(EXTRACT_PATH, extracted_file_name)
@@ -71,19 +63,14 @@ def extract_zip_file(zip_file_path, extract_to_path):
         for entry in zip_ref.infolist():
             if not entry.is_dir():
                 return entry.filename
-    return ""
 
 
-async def main():
-    zip_file_name = "Monthly New Registration of Cars by Make.zip"
-    zip_url = f"https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle Registration/{zip_file_name}"  # Replace with the actual URL
-    collection_name = "cars"
-
+async def main(collection_name, zip_file_name, zip_url, key_fields):
     message = await update(
         collection_name=collection_name,
         zip_file_name=zip_file_name,
         zip_url=zip_url,
-        key_fields=["month"],
+        key_fields=key_fields,
     )
 
     response = {
@@ -96,7 +83,3 @@ async def main():
     print(response)
 
     return response
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
