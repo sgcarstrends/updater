@@ -1,7 +1,7 @@
 import requests
 
 
-async def download_file(url, destination):
+async def download_file(url: str, destination: str) -> None:
     try:
         response = requests.get(url, stream=True)
         response.raise_for_status()  # Check for HTTP errors
@@ -12,5 +12,12 @@ async def download_file(url, destination):
                     f.write(chunk)
 
         print(f"File downloaded to: {destination}")
-    except requests.exceptions.RequestException as e:
+
+    except requests.exceptions.HTTPError as e:
+        print(
+            f"Download failed: HTTP Error - {e.response.status_code} {e.response.reason}"
+        )
+    except requests.exceptions.Timeout as e:
+        print(f"Download failed: Request timed out.")
+    except requests.exceptions.RequestException as e:  # Fallback for other errors
         print(f"Download failed: {e}")

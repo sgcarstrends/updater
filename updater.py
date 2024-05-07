@@ -4,13 +4,17 @@ import os
 from zipfile import ZipFile
 from pymongo import MongoClient
 from download_file import download_file
+from utils.create_unique_key import create_unique_key
+from typing import List, Dict, Any
 
 EXTRACT_PATH = "tmp"
 
-csv_data = []
+csv_data: List[Dict[str, Any]] = []
 
 
-async def update(collection_name, zip_file_name, zip_url, key_fields):
+async def update(
+    collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
+) -> str:
     client = MongoClient(os.environ.get("MONGODB_URI", "mongodb://localhost:27017/"))
     db = client[os.environ.get("MONGODB_DB_NAME", "local-lta-datasets")]
     collection = db[collection_name]
@@ -29,9 +33,6 @@ async def update(collection_name, zip_file_name, zip_url, key_fields):
                 csv_data.append(row)
 
         existing_data = collection.find({})
-
-        def create_unique_key(item, key_fields):
-            return "-".join(str(item[field]) for field in key_fields if item.get(field))
 
         existing_data_map = {
             create_unique_key(item, key_fields): item for item in existing_data
@@ -52,12 +53,12 @@ async def update(collection_name, zip_file_name, zip_url, key_fields):
 
         return message
 
-    except Exception as error:  # Use Exception for a broader error catch
+    except Exception as error:
         print(f"An error has occurred: {error}")
         raise
 
 
-def extract_zip_file(zip_file_path, extract_to_path):
+def extract_zip_file(zip_file_path: str, extract_to_path: str) -> str:
     with ZipFile(zip_file_path, "r") as zip_ref:
         zip_ref.extractall(extract_to_path)
         for entry in zip_ref.infolist():
@@ -65,7 +66,9 @@ def extract_zip_file(zip_file_path, extract_to_path):
                 return entry.filename
 
 
-async def main(collection_name, zip_file_name, zip_url, key_fields):
+async def main(
+    collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
+) -> Dict[str, Any]:
     message = await update(
         collection_name=collection_name,
         zip_file_name=zip_file_name,
