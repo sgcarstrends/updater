@@ -19,8 +19,8 @@ csv_data = []
 
 
 async def update(collection_name, zip_file_name, zip_url, key_fields):
-    client = MongoClient("mongodb://localhost:27017/")
-    db = client["local-lta-datasets"]
+    client = MongoClient(os.environ.get("MONGODB_URI", "mongodb://localhost:27017/"))
+    db = client[os.environ.get("MONGODB_DB_NAME", "local-lta-datasets")]
     collection = db[collection_name]
 
     try:
