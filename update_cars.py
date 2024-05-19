@@ -1,6 +1,7 @@
 import asyncio
-import updater
 from typing import List
+
+import updater
 
 
 async def main():

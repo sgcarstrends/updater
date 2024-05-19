@@ -1,18 +1,19 @@
 import csv
 import datetime
 import os
-from zipfile import ZipFile
+import time
+from typing import List, Dict, Any
+
 from pymongo import MongoClient
+
 from download_file import download_file
 from utils.create_unique_key import create_unique_key
-from typing import List, Dict, Any
+from utils.extract_zip_file import extract_zip_file
 
 EXTRACT_PATH = "tmp"
 
-csv_data: List[Dict[str, Any]] = []
 
-
-async def update(
+async def updater(
     collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> str:
     client = MongoClient(os.environ.get("MONGODB_URI", "mongodb://localhost:27017/"))
@@ -21,22 +22,22 @@ async def update(
 
     try:
         zip_file_path = os.path.join(EXTRACT_PATH, zip_file_name)
-        await download_file(zip_url, zip_file_path)
+        download_file(zip_url, zip_file_path)
 
         extracted_file_name = extract_zip_file(zip_file_path, EXTRACT_PATH)
         destination_path = os.path.join(EXTRACT_PATH, extracted_file_name)
         print(f"Destination path: {destination_path}")
 
+        csv_data: List[Dict[str, Any]] = []
         with open(destination_path, "r", encoding="utf-8") as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
-                row["make"] = row["make"].replace(".", "")
+                if "make" in row:
+                    row["make"] = row["make"].replace(".", "")
                 csv_data.append(row)
 
-        existing_data = collection.find({})
-
         existing_data_map = {
-            create_unique_key(item, key_fields): item for item in existing_data
+            create_unique_key(item, key_fields): item for item in collection.find({})
         }
         new_data_to_insert = [
             item
@@ -45,8 +46,10 @@ async def update(
         ]
 
         if new_data_to_insert:
+            start = time.time()
             result = collection.insert_many(new_data_to_insert)
-            message = f"{len(result.inserted_ids)} document(s) inserted"
+            end = time.time()
+            message = f"{len(result.inserted_ids)} document(s) inserted in {round((end - start) * 1000)}ms"
         else:
             message = (
                 "No new data to insert. The provided data matches the existing records."
@@ -59,31 +62,30 @@ async def update(
         raise
 
 
-def extract_zip_file(zip_file_path: str, extract_to_path: str) -> str:
-    with ZipFile(zip_file_path, "r") as zip_ref:
-        zip_ref.extractall(extract_to_path)
-        for entry in zip_ref.infolist():
-            if not entry.is_dir():
-                return entry.filename
-
-
 async def main(
     collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> Dict[str, Any]:
-    message = await update(
-        collection_name=collection_name,
-        zip_file_name=zip_file_name,
-        zip_url=zip_url,
-        key_fields=key_fields,
-    )
-
-    response = {
-        "status": 200,
-        "collection": collection_name,
-        "message": message,
-        "timestamp": datetime.datetime.now().isoformat(),
-    }
-
-    print(response)
-
-    return response
+    try:
+        message = await updater(
+            collection_name,
+            zip_file_name,
+            zip_url,
+            key_fields,
+        )
+        response = {
+            "status": 200,
+            "collection": collection_name,
+            "message": message,
+            "timestamp": datetime.datetime.now().isoformat(),
+        }
+        print(response)
+        return response
+    except Exception as e:
+        response = {
+            "status": 500,
+            "collection": collection_name,
+            "message": str(e),
+            "timestamp": datetime.datetime.now().isoformat(),
+        }
+        print(response)
+        return response
