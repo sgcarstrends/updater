@@ -183,4 +183,5 @@ pyvenv.cfg
 pip-selfcheck.json
 
 tmp
+python
 *.zip
