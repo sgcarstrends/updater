@@ -30,6 +30,7 @@ async def update(
         with open(destination_path, "r", encoding="utf-8") as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
+                row["make"] = row["make"].replace(".", "")
                 csv_data.append(row)
 
         existing_data = collection.find({})
