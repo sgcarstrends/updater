@@ -49,7 +49,7 @@ jobs:
           python -m venv python
           source python/bin/activate
           pip install -r requirements.txt
-          zip -r package.zip python/lib/python3.12/site-packages
+          zip -r package.zip python/lib/python3.12/site-packages -x "**/pulumi*/*" "**/pip*/*" "**/pytest*/*"
       - uses: pulumi/actions@v5
         with:
           command: up
