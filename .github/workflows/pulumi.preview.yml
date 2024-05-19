@@ -1,4 +1,4 @@
-name: Deploy to AWS Lambda
+name: Preview Deployment
 
 on:
   push:
@@ -8,6 +8,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: Preview
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -69,6 +70,6 @@ jobs:
       #        run: |
       #          aws lambda update-function-code --function-name prod-lta-datasets-updater --zip-file fileb://deployment_package.zip
 
-      - name: Deploy to AWS Lambda - Preview
+      - name: Deploy
         run: |
           aws lambda update-function-code --function-name dev-lta-datasets-updater --zip-file fileb://deployment_package.zip

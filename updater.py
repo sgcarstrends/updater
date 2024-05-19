@@ -4,20 +4,23 @@ import os
 import time
 from typing import List, Dict, Any
 
+from dotenv import load_dotenv
 from pymongo import MongoClient
 
 from download_file import download_file
 from utils.create_unique_key import create_unique_key
 from utils.extract_zip_file import extract_zip_file
 
-EXTRACT_PATH = "tmp"
+load_dotenv()
+
+EXTRACT_PATH = "/tmp"
 
 
 async def updater(
     collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> str:
-    client = MongoClient(os.environ.get("MONGODB_URI", "mongodb://localhost:27017/"))
-    db = client[os.environ.get("MONGODB_DB_NAME", "local-lta-datasets")]
+    client = MongoClient(os.environ.get("MONGODB_URI"))
+    db = client[os.environ.get("MONGODB_DB_NAME")]
     collection = db[collection_name]
 
     try:

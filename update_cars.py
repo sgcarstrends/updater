@@ -1,4 +1,5 @@
 import asyncio
+import json
 from typing import List
 
 import updater
@@ -12,12 +13,18 @@ async def main():
     )
     key_fields: List[str] = ["month"]
 
-    await updater.main(
+    response = await updater.main(
         collection_name=collection_name,
         zip_url=zip_url,
         zip_file_name=zip_file_name,
         key_fields=key_fields,
     )
+    return response
+
+
+def handler(event, context):
+    response = asyncio.run(main())
+    return {"statusCode": 200, "body": response}
 
 
 if __name__ == "__main__":
