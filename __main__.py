@@ -44,7 +44,6 @@ packages_layer = aws.lambda_.LayerVersion(
     compatible_runtimes=[aws.lambda_.Runtime.PYTHON3D12],
 )
 
-
 update_cars_function = aws.lambda_.Function(
     f"{project_name}-cars-function",
     code=pulumi.AssetArchive(
@@ -58,6 +57,7 @@ update_cars_function = aws.lambda_.Function(
     role=role.arn,
     environment=aws.lambda_.FunctionEnvironmentArgs(
         variables={
+            "TZ": "Asia/Singapore",
             "MONGODB_URI": pulumi.Config().require_secret("MONGODB_URI"),
             "MONGODB_DB_NAME": pulumi.Config().require("MONGODB_DB_NAME"),
         }
@@ -68,7 +68,6 @@ update_cars_function = aws.lambda_.Function(
     timeout=15,
     layers=[packages_layer.arn],
 )
-
 
 update_cars_rule = aws.cloudwatch.EventRule(
     f"{project_name}-cars-rule",
