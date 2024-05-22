@@ -1,6 +1,5 @@
 Arpeggio==2.0.2
 attrs==23.2.0
-black==24.4.2
 certifi==2024.2.2
 charset-normalizer==3.3.2
 click==8.1.7
@@ -19,12 +18,10 @@ protobuf==4.25.3
 pulumi==3.116.1
 pulumi_aws==6.36.0
 pymongo==4.7.2
-pytest==8.2.1
+pytest==8.2.0
 python-dotenv==1.0.1
 PyYAML==6.0.1
 requests==2.31.0
 semver==2.13.0
-setuptools==69.5.1
 six==1.16.0
 urllib3==2.2.1
-wheel==0.43.0

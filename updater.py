@@ -16,7 +16,7 @@ load_dotenv()
 
 
 async def updater(
-    collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
+        collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> str:
     client = MongoClient(os.environ.get("MONGODB_URI"))
     db = client[os.environ.get("MONGODB_DB_NAME")]
@@ -65,8 +65,11 @@ async def updater(
 
 
 async def main(
-    collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
+        collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> Dict[str, Any]:
+    time_now = datetime.datetime.now().isoformat()
+    response: Dict[str, str]
+
     try:
         message = await updater(
             collection_name,
@@ -75,19 +78,15 @@ async def main(
             key_fields,
         )
         response = {
-            "status": 200,
             "collection": collection_name,
             "message": message,
-            "timestamp": datetime.datetime.now().isoformat(),
+            "timestamp": time_now,
         }
-        print(response)
-        return response
     except Exception as e:
         response = {
-            "status": 500,
             "collection": collection_name,
             "message": str(e),
-            "timestamp": datetime.datetime.now().isoformat(),
+            "timestamp": time_now,
         }
-        print(response)
-        return response
+    print(response)
+    return response

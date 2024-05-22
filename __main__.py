@@ -71,7 +71,6 @@ update_cars_function = aws.lambda_.Function(
 
 update_cars_rule = aws.cloudwatch.EventRule(
     f"{project_name}-cars-rule",
-    # schedule_expression="cron(0/1 * * * ? *)",
     schedule_expression="cron(0/60 0-10 ? * MON-FRI *)",
 )
 
