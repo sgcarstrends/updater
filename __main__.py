@@ -69,9 +69,49 @@ update_cars_function = aws.lambda_.Function(
     layers=[packages_layer.arn],
 )
 
+update_coe_function = aws.lambda_.Function(
+    f"{project_name}-coe-function",
+    code=pulumi.AssetArchive(
+        {
+            "utils": pulumi.FileArchive("utils"),
+            "download_file.py": pulumi.FileAsset("download_file.py"),
+            "update_coe.py": pulumi.FileAsset("update_coe.py"),
+            "updater.py": pulumi.FileAsset("updater.py"),
+        }
+    ),
+    role=role.arn,
+    environment=aws.lambda_.FunctionEnvironmentArgs(
+        variables={
+            "TZ": "Asia/Singapore",
+            "MONGODB_URI": pulumi.Config().require_secret("MONGODB_URI"),
+            "MONGODB_DB_NAME": pulumi.Config().require("MONGODB_DB_NAME"),
+        }
+    ),
+    handler="update_coe.handler",
+    runtime=aws.lambda_.Runtime.PYTHON3D12,
+    memory_size=1024,
+    timeout=15,
+    layers=[packages_layer.arn],
+)
+
 update_cars_rule = aws.cloudwatch.EventRule(
     f"{project_name}-cars-rule",
     schedule_expression="cron(0/60 0-10 ? * MON-FRI *)",
+)
+
+update_coe_rule = aws.cloudwatch.EventRule(
+    f"{project_name}-coe-rule",
+    schedule_expression="cron(0/60 0-10 ? * MON-FRI *)",
+)
+
+update_coe_first_bidding_rule = aws.cloudwatch.EventRule(
+    f"{project_name}-coe-first-bidding-rule",
+    schedule_expression="cron(0/10 8-10 ? * 4#1 *)",
+)
+
+update_coe_second_bidding_rule = aws.cloudwatch.EventRule(
+    f"{project_name}-coe-second-bidding-rule",
+    schedule_expression="cron(0/10 8-10 ? * 4#3 *)",
 )
 
 aws.lambda_.Permission(
@@ -82,6 +122,14 @@ aws.lambda_.Permission(
     source_arn=update_cars_rule.arn,
 )
 
+aws.lambda_.Permission(
+    f"{project_name}-coe-permission",
+    action="lambda:InvokeFunction",
+    function=update_coe_function.name,
+    principal="events.amazonaws.com",
+    source_arn=update_coe_rule.arn,
+)
+
 update_cars_target = aws.cloudwatch.EventTarget(
     f"{project_name}-cars-target",
     rule=update_cars_rule.name,
@@ -90,4 +138,22 @@ update_cars_target = aws.cloudwatch.EventTarget(
 
 pulumi.export("update_cars_function", update_cars_function.name)
 pulumi.export("update_cars_rule", update_cars_rule.schedule_expression)
+update_coe_target = aws.cloudwatch.EventTarget(
+    f"{project_name}-coe-target",
+    rule=update_coe_rule.name,
+    arn=update_coe_function.arn,
+)
+
+update_coe_first_bidding_target = aws.cloudwatch.EventTarget(
+    f"{project_name}-coe-first-bidding-target",
+    rule=update_coe_first_bidding_rule.name,
+    arn=update_coe_function.arn,
+)
+
+update_coe_second_bidding_target = aws.cloudwatch.EventTarget(
+    f"{project_name}-coe-second-bidding-target",
+    rule=update_coe_second_bidding_rule.name,
+    arn=update_coe_function.arn,
+)
+
 pulumi.export("packages_layer", packages_layer.source_code_size)
