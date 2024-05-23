@@ -6,8 +6,8 @@ import time
 from typing import List, Dict, Any
 
 from dotenv import load_dotenv
-from pymongo import MongoClient
 
+from db import MongoDBConnection
 from download_file import download_file
 from utils.create_unique_key import create_unique_key
 from utils.extract_zip_file import extract_zip_file
@@ -18,8 +18,9 @@ load_dotenv()
 async def updater(
         collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> str:
-    client = MongoClient(os.environ.get("MONGODB_URI"))
-    db = client[os.environ.get("MONGODB_DB_NAME")]
+    # client = MongoClient(os.environ.get("MONGODB_URI"))
+    # db = client[os.environ.get("MONGODB_DB_NAME")]
+    db = MongoDBConnection().database
     collection = db[collection_name]
 
     try:
@@ -53,6 +54,7 @@ async def updater(
                 start = time.time()
                 result = collection.insert_many(new_data_to_insert)
                 end = time.time()
+                db.client.close()
                 message = f"{len(result.inserted_ids)} document(s) inserted in {round((end - start) * 1000)}ms"
             else:
                 message = "No new data to insert. The provided data matches the existing records."

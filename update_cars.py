@@ -2,6 +2,7 @@ import asyncio
 from typing import List
 
 import updater
+from db import MongoDBConnection
 
 
 async def main():
@@ -11,6 +12,15 @@ async def main():
         f"https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle Registration/{zip_file_name}"
     )
     key_fields: List[str] = ["month"]
+
+    db = MongoDBConnection().database
+    collection = db[collection_name]
+    collection.create_index({"month": 1, "make": 1});
+    collection.create_index({"make": 1});
+    collection.create_index({"fuel_type": 1});
+    collection.create_index({"make": 1, "fuel_type": 1});
+    collection.create_index({"number": 1});
+    db.client.close()
 
     response = await updater.main(
         collection_name=collection_name,
