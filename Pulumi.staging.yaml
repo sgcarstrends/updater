@@ -1,4 +1,4 @@
 config:
   lta-datasets-updater:MONGODB_DB_NAME: main
   lta-datasets-updater:MONGODB_URI:
-    secure: AAABABqQmh4/i9pBXCTfnstQiEebrs1i3CUOAEQyZCwhaw2BhAI6H5AlkXypuWTYj6dqFmLs9RBXSCRnMgQewY/Q+5Sb+B4e9zOpB/7uM5V4nJhR95H0gwkrDA7hvias7xNEnECNdgsJ7VmFP5ZrvJzFo61oi1EdJUy8WtjMvOMglLDK2z0blggc+tzihS3M555Gc8PPjF+SrvHgE3n+QBLF0QMRGnbWpqw=
+    secure: AAABAN0o/zWf3MphIQvmc9cWuSzYpAIXU7OZd6GA3gpG9331IgzDe8kpCsYhcukjA4soBxEOjSAtDYntN89ucHsbi/pux2JCO5D6E3MIHycNlfTjlVUepW36/Lf+HBw0/+/nRsKcLtkBUkL5g0u9/wnM6fWeeqxDzrPwmpdS1c+ExkT3TMKjYwfOK5sVOqYXShryYCBpnDIbESdr3Js4Y39/Ofa6O2gGnYg=

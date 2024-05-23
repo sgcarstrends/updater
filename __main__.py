@@ -3,7 +3,7 @@ import json
 import pulumi
 import pulumi_aws as aws
 
-project_name = "lta-datasets-updater"
+project_name = f"{pulumi.get_stack()}-lta-datasets-updater"
 
 role = aws.iam.Role(
     f"{project_name}-role",
