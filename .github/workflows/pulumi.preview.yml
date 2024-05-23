@@ -56,6 +56,8 @@ jobs:
           stack-name: staging
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MONGODB_DB_NAME: ${{ secrets.MONGODB_DB_NAME }}
 
         #      - name: Deploy to AWS Lambda - Production
         #        if: env.ENVIRONMENT == 'Production'
