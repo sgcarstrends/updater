@@ -6,6 +6,9 @@ on:
       - "*"
       - "!main"
 
+concurrency:
+  group: merge-${{ github.ref }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
