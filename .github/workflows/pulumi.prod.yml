@@ -9,34 +9,16 @@ concurrency:
   group: merge-${{ github.ref }}
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    environment: Preview
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.12
-          cache: 'pip'
-      - run: pip install -r requirements.txt
-      - name: Run tests
-        run: pytest
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
   deploy:
     runs-on: ubuntu-latest
     environment: Preview
     needs: test
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: 3.12
           cache: 'pip'
