@@ -1,0 +1,7 @@
+{
+  config: {
+    'pulumi:tags': {
+      'pulumi:template': aws-python
+    }
+  }
+}

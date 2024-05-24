@@ -1,0 +1,63 @@
+name: Pulumi Deploy Preview
+
+on:
+  push:
+    branches:
+      - "*"
+      - "!main"
+
+concurrency:
+  group: merge-${{ github.ref }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: Preview
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.12
+          cache: 'pip'
+      - run: pip install -r requirements.txt
+      - name: Run tests
+        run: pytest
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+  deploy:
+    runs-on: ubuntu-latest
+    environment: Preview
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.12
+          cache: 'pip'
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - name: Create Package for AWS Lambda Layer
+        run: |
+          python -m venv python
+          source python/bin/activate
+          pip install -r requirements.txt -t python
+          python create_package_zip.py
+      - uses: pulumi/actions@v5
+        with:
+          command: up
+          stack-name: staging
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MONGODB_DB_NAME: ${{ secrets.MONGODB_DB_NAME }}

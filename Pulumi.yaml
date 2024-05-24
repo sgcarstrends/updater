@@ -1,0 +1,9 @@
+name: lta-datasets-updater
+runtime:
+  name: python
+  options:
+    virtualenv: venv
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: aws-python
