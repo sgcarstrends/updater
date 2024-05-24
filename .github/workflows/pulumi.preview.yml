@@ -58,12 +58,3 @@ jobs:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_DB_NAME: ${{ secrets.MONGODB_DB_NAME }}
-
-        #      - name: Deploy to AWS Lambda - Production
-        #        if: env.ENVIRONMENT == 'Production'
-        #        run: |
-        #          aws lambda update-function-code --function-name prod-lta-datasets-updater --zip-file fileb://deployment_package.zip
-
-        #      - name: Deploy
-        #        run: |
-        #          aws lambda update-function-code --function-name dev-lta-datasets-updater --zip-file fileb://deployment_package.zip
