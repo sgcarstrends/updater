@@ -11,8 +11,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: Preview
-    needs: test
+    environment: Production
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
