@@ -115,8 +115,8 @@ def create_event_rule(name, scheduled_expression, target_lambda_function):
 cron_schedulers = {
     "cars": {"cron": "cron(0/60 0-10 ? * MON-FRI *)", "function": update_cars_function},
     "coe": {"cron": "cron(0/60 0-10 ? * MON-FRI *)", "function": update_coe_function},
-    "coe-first-bidding": {"cron": "cron(0/10 8-10 ? * 4#1 *)", "function": update_coe_function},
-    "coe-second-bidding": {"cron": "cron(0/10 8-10 ? * 4#3 *)", "function": update_coe_function},
+    "coe-1st-bidding": {"cron": "cron(0/10 8-10 ? * 4#1 *)", "function": update_coe_function},
+    "coe-2nd-bidding": {"cron": "cron(0/10 8-10 ? * 4#3 *)", "function": update_coe_function},
 }
 
 for name, scheduler in cron_schedulers.items():
