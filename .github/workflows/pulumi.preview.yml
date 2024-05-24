@@ -48,8 +48,8 @@ jobs:
         run: |
           python -m venv python
           source python/bin/activate
-          pip install -r requirements.txt
-          zip -r package.zip python/lib/python3.12/site-packages -x "**/pulumi*/*" "**/pip*/*" "**/pytest*/*"
+          pip install -r requirements.txt -t python
+          python create_package_zip.py
       - uses: pulumi/actions@v5
         with:
           command: up

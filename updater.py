@@ -18,8 +18,6 @@ load_dotenv()
 async def updater(
         collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> str:
-    # client = MongoClient(os.environ.get("MONGODB_URI"))
-    # db = client[os.environ.get("MONGODB_DB_NAME")]
     db = MongoDBConnection().database
     collection = db[collection_name]
 

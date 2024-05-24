@@ -1,9 +1,12 @@
 import json
 import os
+import tempfile
 
 import pulumi
 import pulumi_aws as aws
 from dotenv import load_dotenv
+
+import create_package_zip
 
 load_dotenv()
 
@@ -40,12 +43,16 @@ aws.iam.RolePolicyAttachment(
     policy_arn=aws.iam.ManagedPolicy.AWS_LAMBDA_BASIC_EXECUTION_ROLE,
 )
 
-package_layer = aws.lambda_.LayerVersion(
-    f"{PROJECT_NAME}-layer",
-    layer_name=f"{PROJECT_NAME}-layer",
-    code=pulumi.FileArchive("package.zip"),
-    compatible_runtimes=[RUNTIME],
-)
+temp_dir = tempfile.TemporaryDirectory().name
+zip_file = 'python.zip'
+
+create_package_zip.main(temp_dir, zip_file)
+
+package_layer = aws.lambda_.LayerVersion(f'{PROJECT_NAME}-layer',
+                                         layer_name=f"{PROJECT_NAME}-layer",
+                                         code=pulumi.AssetArchive({".": pulumi.FileArchive(f"{temp_dir}/{zip_file}")}),
+                                         compatible_runtimes=[aws.lambda_.Runtime.PYTHON3D12]
+                                         )
 
 
 def create_lambda_function(name, handler, code):
@@ -63,7 +70,9 @@ def create_lambda_function(name, handler, code):
 
 
 def create_asset_archive(update_file):
+    # TODO: Need a more recursive way to handle these file dependencies
     files = {"utils": pulumi.FileArchive("utils"),
+             "db.py": pulumi.FileAsset("db.py"),
              "download_file.py": pulumi.FileAsset("download_file.py"),
              "updater.py": pulumi.FileAsset("updater.py"),
              f"{update_file}.py": pulumi.FileAsset(f"{update_file}.py")}

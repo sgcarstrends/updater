@@ -14,6 +14,3 @@ class MongoDBConnection:
     @property
     def database(self):
         return self.db
-
-    def close_connection(self):
-        self.client.close()

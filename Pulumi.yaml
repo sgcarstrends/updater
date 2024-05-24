@@ -2,7 +2,7 @@ name: lta-datasets-updater
 runtime:
   name: python
   options:
-    virtualenv: python
+    virtualenv: venv
 config:
   pulumi:tags:
     value:

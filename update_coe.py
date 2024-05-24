@@ -15,21 +15,17 @@ async def main():
 
     db = MongoDBConnection().database
     collection = db[collection_name]
+
+    # Create indexes
     collection.create_index({"month": 1, "vehicle_class": 1});
     collection.create_index({"vehicle_class": 1});
     collection.create_index({"month": 1, "bidding_no": 1});
     collection.create_index({"premium": 1});
     collection.create_index({"bids_success": 1, "bids_received": 1});
+
     db.client.close()
 
-    response = await updater.main(
-        collection_name=collection_name,
-        zip_url=zip_url,
-        zip_file_name=zip_file_name,
-        key_fields=key_fields,
-    )
-
-    return response
+    return await updater.main(collection_name, zip_file_name, zip_url, key_fields)
 
 
 def handler(event, context):
