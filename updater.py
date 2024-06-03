@@ -16,7 +16,7 @@ load_dotenv()
 
 
 async def updater(
-        collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
+    collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> str:
     db = MongoDBConnection().database
     collection = db[collection_name]
@@ -65,7 +65,7 @@ async def updater(
 
 
 async def main(
-        collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
+    collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> Dict[str, Any]:
     time_now = datetime.datetime.now().isoformat()
     response: Dict[str, str]

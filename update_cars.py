@@ -17,12 +17,12 @@ async def main():
     collection = db[collection_name]
 
     # Create indexes
-    collection.create_index({"month": 1, "make": 1});
-    collection.create_index({"month": 1});
-    collection.create_index({"make": 1});
-    collection.create_index({"fuel_type": 1});
-    collection.create_index({"make": 1, "fuel_type": 1});
-    collection.create_index({"number": 1});
+    collection.create_index({"month": 1, "make": 1})
+    collection.create_index({"month": 1})
+    collection.create_index({"make": 1})
+    collection.create_index({"fuel_type": 1})
+    collection.create_index({"make": 1, "fuel_type": 1})
+    collection.create_index({"number": 1})
 
     db.client.close()
 

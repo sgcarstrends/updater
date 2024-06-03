@@ -44,38 +44,47 @@ aws.iam.RolePolicyAttachment(
 )
 
 temp_dir = tempfile.TemporaryDirectory().name
-zip_file = 'python.zip'
+zip_file = "python.zip"
 
 create_package_zip.main(temp_dir, zip_file)
 
-package_layer = aws.lambda_.LayerVersion(f'{PROJECT_NAME}-layer',
-                                         layer_name=f"{PROJECT_NAME}-layer",
-                                         code=pulumi.AssetArchive({".": pulumi.FileArchive(f"{temp_dir}/{zip_file}")}),
-                                         compatible_runtimes=[aws.lambda_.Runtime.PYTHON3D12]
-                                         )
+package_layer = aws.lambda_.LayerVersion(
+    f"{PROJECT_NAME}-layer",
+    layer_name=f"{PROJECT_NAME}-layer",
+    code=pulumi.AssetArchive({".": pulumi.FileArchive(f"{temp_dir}/{zip_file}")}),
+    compatible_runtimes=[aws.lambda_.Runtime.PYTHON3D12],
+)
 
 
 def create_lambda_function(name, handler, code):
-    return aws.lambda_.Function(f"{PROJECT_NAME}-{name}-function",
-                                code=code,
-                                role=role.arn,
-                                environment=aws.lambda_.FunctionEnvironmentArgs(
-                                    variables={
-                                        "TZ": "Asia/Singapore",
-                                        "MONGODB_URI": MONGODB_URI,
-                                        "MONGODB_DB_NAME": MONGODB_DB_NAME
-                                    }
-                                ), handler=handler, runtime=RUNTIME, memory_size=MEMORY_SIZE, timeout=TIMEOUT,
-                                layers=[package_layer.arn])
+    return aws.lambda_.Function(
+        f"{PROJECT_NAME}-{name}-function",
+        code=code,
+        role=role.arn,
+        environment=aws.lambda_.FunctionEnvironmentArgs(
+            variables={
+                "TZ": "Asia/Singapore",
+                "MONGODB_URI": MONGODB_URI,
+                "MONGODB_DB_NAME": MONGODB_DB_NAME,
+            }
+        ),
+        handler=handler,
+        runtime=RUNTIME,
+        memory_size=MEMORY_SIZE,
+        timeout=TIMEOUT,
+        layers=[package_layer.arn],
+    )
 
 
 def create_asset_archive(update_file):
     # TODO: Need a more recursive way to handle these file dependencies
-    files = {"utils": pulumi.FileArchive("utils"),
-             "db.py": pulumi.FileAsset("db.py"),
-             "download_file.py": pulumi.FileAsset("download_file.py"),
-             "updater.py": pulumi.FileAsset("updater.py"),
-             f"{update_file}.py": pulumi.FileAsset(f"{update_file}.py")}
+    files = {
+        "utils": pulumi.FileArchive("utils"),
+        "db.py": pulumi.FileAsset("db.py"),
+        "download_file.py": pulumi.FileAsset("download_file.py"),
+        "updater.py": pulumi.FileAsset("updater.py"),
+        f"{update_file}.py": pulumi.FileAsset(f"{update_file}.py"),
+    }
     return pulumi.AssetArchive(files)
 
 
@@ -93,7 +102,9 @@ update_coe_function = create_lambda_function(
 
 
 def create_event_rule(name, scheduled_expression, target_lambda_function):
-    rule = aws.cloudwatch.EventRule(f"{PROJECT_NAME}-{name}-rule", schedule_expression=scheduled_expression)
+    rule = aws.cloudwatch.EventRule(
+        f"{PROJECT_NAME}-{name}-rule", schedule_expression=scheduled_expression
+    )
 
     aws.cloudwatch.EventTarget(
         f"{PROJECT_NAME}-{name}-target",
@@ -115,12 +126,18 @@ def create_event_rule(name, scheduled_expression, target_lambda_function):
 cron_schedulers = {
     "cars": {"cron": "cron(0/60 0-10 ? * MON-FRI *)", "function": update_cars_function},
     "coe": {"cron": "cron(0/60 0-10 ? * MON-FRI *)", "function": update_coe_function},
-    "coe-1st-bidding": {"cron": "cron(0/10 8-10 ? * 4#1 *)", "function": update_coe_function},
-    "coe-2nd-bidding": {"cron": "cron(0/10 8-10 ? * 4#3 *)", "function": update_coe_function},
+    "coe-1st-bidding": {
+        "cron": "cron(0/10 8-10 ? * 4#1 *)",
+        "function": update_coe_function,
+    },
+    "coe-2nd-bidding": {
+        "cron": "cron(0/10 8-10 ? * 4#3 *)",
+        "function": update_coe_function,
+    },
 }
 
 for name, scheduler in cron_schedulers.items():
-    create_event_rule(name, scheduler['cron'], scheduler['function'])
+    create_event_rule(name, scheduler["cron"], scheduler["function"])
 
 pulumi.export("update_cars_function", update_cars_function.name)
 pulumi.export("update_coe_function", update_coe_function.name)
