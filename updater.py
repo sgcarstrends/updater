@@ -1,6 +1,7 @@
 import csv
 import datetime
 import os
+import re
 import tempfile
 import time
 from typing import List, Dict, Any
@@ -38,8 +39,10 @@ async def updater(
                         row["make"] = row["make"].replace(".", "")
                     # Convert string values to numbers if possible
                     for key, value in row.items():
-                        if isinstance(value, str):
+                        if re.match(r"\b\d+(?:,\d+)?\b", value):
+                            row[key] = 0 if value == "" else value
                             try:
+                                value = str(int(value.replace(",", "")))
                                 row[key] = float(value) if "." in value else int(value)
                             except ValueError:
                                 pass
