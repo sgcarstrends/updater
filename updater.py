@@ -36,6 +36,13 @@ async def updater(
                 for row in csv_reader:
                     if "make" in row:
                         row["make"] = row["make"].replace(".", "")
+                    # Convert string values to numbers if possible
+                    for key, value in row.items():
+                        if isinstance(value, str):
+                            try:
+                                row[key] = float(value) if "." in value else int(value)
+                            except ValueError:
+                                pass
                     csv_data.append(row)
 
             existing_data_map = {
