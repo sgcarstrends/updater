@@ -16,6 +16,29 @@ from utils.extract_zip_file import extract_zip_file
 load_dotenv()
 
 
+def read_csv_data(file_path: str) -> List[Dict[str, Any]]:
+    csv_data = []
+    with open(file_path, "r", encoding="utf-8") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            csv_data.append(process_csv_row(row))
+    return csv_data
+
+
+def process_csv_row(row) -> Dict[str, Any]:
+    if "make" in row:
+        row["make"] = row["make"].replace(".", "")
+    # Convert string values to numbers if possible
+    for key, value in row.items():
+        if re.match(r"\b\d+(?:,\d+)?\b", value):
+            row[key] = 0 if value == "" else value
+            try:
+                value = str(int(value.replace(",", "")))
+                row[key] = float(value) if "." in value else int(value)
+            except ValueError:
+                pass
+
+
 async def updater(
     collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> str:
@@ -31,22 +54,7 @@ async def updater(
             destination_path = os.path.join(temp_dir, extracted_file_name)
             print(f"Destination path: {destination_path}")
 
-            csv_data: List[Dict[str, Any]] = []
-            with open(destination_path, "r", encoding="utf-8") as csv_file:
-                csv_reader = csv.DictReader(csv_file)
-                for row in csv_reader:
-                    if "make" in row:
-                        row["make"] = row["make"].replace(".", "")
-                    # Convert string values to numbers if possible
-                    for key, value in row.items():
-                        if re.match(r"\b\d+(?:,\d+)?\b", value):
-                            row[key] = 0 if value == "" else value
-                            try:
-                                value = str(int(value.replace(",", "")))
-                                row[key] = float(value) if "." in value else int(value)
-                            except ValueError:
-                                pass
-                    csv_data.append(row)
+            csv_data: List[Dict[str, Any]] = await read_csv_data(destination_path)
 
             existing_data_map = {
                 create_unique_key(item, key_fields): item
