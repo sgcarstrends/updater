@@ -37,6 +37,7 @@ def process_csv_row(row) -> Dict[str, Any]:
                 row[key] = float(value) if "." in value else int(value)
             except ValueError:
                 pass
+    return row
 
 
 async def updater(
@@ -54,7 +55,7 @@ async def updater(
             destination_path = os.path.join(temp_dir, extracted_file_name)
             print(f"Destination path: {destination_path}")
 
-            csv_data: List[Dict[str, Any]] = await read_csv_data(destination_path)
+            csv_data: List[Dict[str, Any]] = read_csv_data(destination_path)
 
             existing_data_map = {
                 create_unique_key(item, key_fields): item
