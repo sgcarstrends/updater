@@ -17,7 +17,6 @@ TIMEOUT = 15
 RUNTIME = aws.lambda_.Runtime.PYTHON3D12
 TIMEZONE = "Asia/Singapore"
 
-config = pulumi.Config()
 MONGODB_URI = os.environ.get("MONGODB_URI")
 MONGODB_DB_NAME = os.environ.get("MONGODB_DB_NAME")
 
