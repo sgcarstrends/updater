@@ -17,8 +17,8 @@ TIMEOUT = 15
 RUNTIME = aws.lambda_.Runtime.PYTHON3D12
 TIMEZONE = "Asia/Singapore"
 
-MONGODB_URI = os.environ.get("MONGODB_URI")
-MONGODB_DB_NAME = os.environ.get("MONGODB_DB_NAME")
+MONGODB_URI = os.getenv("MONGODB_URI")
+MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME")
 
 role = aws.iam.Role(
     f"{PROJECT_NAME}-role",
