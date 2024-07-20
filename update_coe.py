@@ -22,6 +22,7 @@ async def main():
     collection.create_index({"month": 1, "bidding_no": 1})
     collection.create_index({"premium": 1})
     collection.create_index({"bids_success": 1, "bids_received": 1})
+    collection.create_index({"month": -1, "bidding_no": -1, "vehicle_class": 1})
 
     db.client.close()
 
