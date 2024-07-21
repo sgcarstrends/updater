@@ -76,12 +76,10 @@ def create_lambda_function(name, handler, code):
 
 
 def create_asset_archive(update_file):
-    # TODO: Need a more recursive way to handle these file dependencies
+    base_files = ["db.py", "download_file.py", "updater.py"]
     files = {
         "utils": pulumi.FileArchive("utils"),
-        "db.py": pulumi.FileAsset("db.py"),
-        "download_file.py": pulumi.FileAsset("download_file.py"),
-        "updater.py": pulumi.FileAsset("updater.py"),
+        **{file: pulumi.FileAsset(file) for file in base_files if os.path.exists(file)},
         f"{update_file}.py": pulumi.FileAsset(f"{update_file}.py"),
     }
     return pulumi.AssetArchive(files)
