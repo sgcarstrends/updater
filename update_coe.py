@@ -30,7 +30,7 @@ async def main():
 
 
 def handler(event, context):
-    print(f"Event:", event)
+    print("Event:", event)
     response = asyncio.run(main())
     return {"statusCode": 200, "body": response}
 
