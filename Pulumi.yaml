@@ -1,4 +1,4 @@
-name: lta-datasets-updater
+name: updater
 runtime:
   name: python
   options:
