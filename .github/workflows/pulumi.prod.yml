@@ -36,7 +36,7 @@ jobs:
       - uses: pulumi/actions@v5
         with:
           command: up
-          stack-name: prod
+          stack-name: sgcarstrends/prod
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
