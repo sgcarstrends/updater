@@ -1,4 +1,4 @@
-name: Pulumi Deploy Staging
+name: Deployment (Staging)
 
 on:
   push:
