@@ -78,9 +78,9 @@ async def main():
         },
     ]
 
-    collection.aggregate(replace_empty_string_with_zero)
-    collection.aggregate(format_values)
-    collection.aggregate(uppercase_make)
+    # collection.aggregate(replace_empty_string_with_zero)
+    # collection.aggregate(format_values)
+    # collection.aggregate(uppercase_make)
 
     db.client.close()
 
