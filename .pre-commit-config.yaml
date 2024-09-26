@@ -1,0 +1,15 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+  - repo: local
+    hooks:
+      - id: update-requirements
+        name: update-requirements
+        description: "Generate requirements.txt based on poetry.lock"
+        entry: poetry export --without-hashes --format requirements.txt --output requirements.txt
+        language: system
+        pass_filenames: false
