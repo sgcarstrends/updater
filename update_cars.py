@@ -104,7 +104,7 @@ async def main() -> Dict[str, Any]:
     return message
 
 
-def handler(event):
+def handler(event, context):
     print("Event:", event)
     response = asyncio.run(main())
     return {"statusCode": 200, "body": response}
