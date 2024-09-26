@@ -26,7 +26,7 @@ def read_csv_data(file_path: str) -> List[Dict[str, Any]]:
 
 async def updater(
     collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
-) -> str:
+) -> tuple[Any, str] | tuple[None, str]:
     db = MongoDBConnection().database
     collection = db[collection_name]
 
@@ -57,10 +57,10 @@ async def updater(
                 end = time.time()
                 db.client.close()
                 message = f"{len(result.inserted_ids)} document(s) inserted in {round((end - start) * 1000)}ms"
+                return result, message
             else:
                 message = "No new data to insert. The provided data matches the existing records."
-
-            return message
+                return None, message
 
     except Exception as error:
         print(f"An error has occurred: {error}")
@@ -70,26 +70,26 @@ async def updater(
 async def main(
     collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
 ) -> Dict[str, Any]:
-    time_now = datetime.datetime.now().isoformat()
-    response: Dict[str, str]
+    timestamp = datetime.datetime.now().isoformat()
 
     try:
-        message = await updater(
+        result, message = await updater(
             collection_name,
             zip_file_name,
             zip_url,
             key_fields,
         )
-        response = {
-            "collection": collection_name,
-            "message": message,
-            "timestamp": time_now,
-        }
+        inserted_count = len(result.inserted_ids) if result else 0
     except Exception as e:
-        response = {
-            "collection": collection_name,
-            "message": str(e),
-            "timestamp": time_now,
-        }
+        inserted_count = 0
+        message = str(e)
+
+    response = {
+        "collection": collection_name,
+        "inserted_count": inserted_count,
+        "message": message,
+        "timestamp": timestamp,
+    }
+
     print(response)
     return response
