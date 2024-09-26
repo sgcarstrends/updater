@@ -3,9 +3,10 @@ import datetime
 import os
 import tempfile
 import time
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 from dotenv import load_dotenv
+from pymongo.results import InsertManyResult
 
 from db import MongoDBConnection
 from download_file import download_file
@@ -16,17 +17,13 @@ load_dotenv()
 
 
 def read_csv_data(file_path: str) -> List[Dict[str, Any]]:
-    csv_data = []
     with open(file_path, "r", encoding="utf-8") as csv_file:
-        csv_reader = csv.DictReader(csv_file)
-        for row in csv_reader:
-            csv_data.append(row)
-    return csv_data
+        return list(csv.DictReader(csv_file))
 
 
 async def updater(
     collection_name: str, zip_file_name: str, zip_url: str, key_fields: List[str]
-) -> tuple[Any, str] | tuple[None, str]:
+) -> Tuple[InsertManyResult | None, str]:
     db = MongoDBConnection().database
     collection = db[collection_name]
 
@@ -55,7 +52,6 @@ async def updater(
                 start = time.time()
                 result = collection.insert_many(new_data_to_insert)
                 end = time.time()
-                db.client.close()
                 message = f"{len(result.inserted_ids)} document(s) inserted in {round((end - start) * 1000)}ms"
                 return result, message
             else:
@@ -63,8 +59,9 @@ async def updater(
                 return None, message
 
     except Exception as error:
-        print(f"An error has occurred: {error}")
-        raise
+        raise Exception(f"An error has occurred: {error}")
+    finally:
+        db.client.close()
 
 
 async def main(
