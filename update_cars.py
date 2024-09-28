@@ -1,7 +1,7 @@
 import asyncio
 from typing import List, Dict, Any
 
-from pymongo import ASCENDING, IndexModel, collection
+from pymongo import ASCENDING, IndexModel
 from pymongo.collection import Collection
 
 import updater
