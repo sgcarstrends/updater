@@ -1,6 +1,7 @@
 import csv
 import datetime
 import os
+import re
 import tempfile
 import time
 from typing import List, Dict, Any, Tuple
@@ -17,8 +18,27 @@ load_dotenv()
 
 
 def read_csv_data(file_path: str) -> List[Dict[str, Any]]:
+    csv_data = []
     with open(file_path, "r", encoding="utf-8") as csv_file:
-        return list(csv.DictReader(csv_file))
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            csv_data.append(process_csv_row(row))
+    return csv_data
+
+
+def process_csv_row(row) -> Dict[str, Any]:
+    if "make" in row:
+        row["make"] = row["make"].replace(".", "")
+    # Convert string values to numbers if possible
+    for key, value in row.items():
+        if re.match(r"\b\d+(?:,\d+)?\b", value):
+            row[key] = 0 if value == "" else value
+            try:
+                value = str(int(value.replace(",", "")))
+                row[key] = float(value) if "." in value else int(value)
+            except ValueError:
+                pass
+    return row
 
 
 async def updater(
