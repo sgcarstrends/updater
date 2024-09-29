@@ -19,6 +19,8 @@ TIMEZONE = "Asia/Singapore"
 
 MONGODB_URI = os.getenv("MONGODB_URI")
 MONGODB_DB_NAME = os.getenv("MONGODB_DB_NAME")
+UPSTASH_REDIS_REST_URL = os.getenv("UPSTASH_REDIS_REST_URL")
+UPSTASH_REDIS_REST_TOKEN = os.getenv("UPSTASH_REDIS_REST_TOKEN")
 
 role = aws.iam.Role(
     f"{PROJECT_NAME}-role",
@@ -65,6 +67,8 @@ def create_lambda_function(name, handler, code):
                 "TZ": "Asia/Singapore",
                 "MONGODB_URI": MONGODB_URI,
                 "MONGODB_DB_NAME": MONGODB_DB_NAME,
+                "UPSTASH_REDIS_REST_URL": UPSTASH_REDIS_REST_URL,
+                "UPSTASH_REDIS_REST_TOKEN": UPSTASH_REDIS_REST_TOKEN,
             }
         ),
         handler=handler,
@@ -78,6 +82,7 @@ def create_lambda_function(name, handler, code):
 def create_asset_archive(update_file):
     base_files = ["db.py", "download_file.py", "updater.py"]
     files = {
+        "config": pulumi.FileArchive("config"),
         "utils": pulumi.FileArchive("utils"),
         **{file: pulumi.FileAsset(file) for file in base_files if os.path.exists(file)},
         f"{update_file}.py": pulumi.FileAsset(f"{update_file}.py"),

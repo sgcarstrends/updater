@@ -9,7 +9,7 @@ concurrency:
   group: merge-${{ github.ref }}
 
 jobs:
-  test:
+  Test:
     runs-on: ubuntu-latest
     environment: Staging
     steps:
@@ -28,10 +28,15 @@ jobs:
   #        with:
   #          token: ${{ secrets.CODECOV_TOKEN }}
 
-  deploy:
+  Deploy:
+    needs: Test
     runs-on: ubuntu-latest
     environment: Staging
-    needs: test
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      MONGODB_DB_NAME: ${{ secrets.MONGODB_DB_NAME }}
+      UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+      UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -59,5 +64,3 @@ jobs:
           stack-name: sgcarstrends/staging
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
-          MONGODB_DB_NAME: ${{ secrets.MONGODB_DB_NAME }}

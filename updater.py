@@ -1,5 +1,6 @@
 import csv
 import datetime
+import json
 import os
 import re
 import tempfile
@@ -11,8 +12,10 @@ from pymongo.results import InsertManyResult
 
 from db import MongoDBConnection
 from download_file import download_file
+from utils.calculate_checksum import calculate_checksum
 from utils.create_unique_key import create_unique_key
 from utils.extract_zip_file import extract_zip_file
+from utils.redis_cache import get_cached_checksum, cache_checksum
 
 load_dotenv()
 
@@ -55,6 +58,25 @@ async def updater(
             extracted_file_name = extract_zip_file(zip_file_path, temp_dir)
             destination_path = os.path.join(temp_dir, extracted_file_name)
             print(f"Destination path: {destination_path}")
+
+            checksum = calculate_checksum(destination_path)
+            print(f"Checksum (SHA-256) of extracted file: {checksum}")
+
+            cached_checksum = await get_cached_checksum(extracted_file_name)
+            if cached_checksum is None:
+                print("No cached checksum found. This might be the first run.")
+                await cache_checksum(extracted_file_name, checksum)
+                print(
+                    f"Checksum for {extracted_file_name} cached. Checksum: {checksum}"
+                )
+            elif cached_checksum == checksum:
+                return (
+                    None,
+                    f"File have not been changed since last update. Checksum: {checksum}",
+                )
+
+            await cache_checksum(extracted_file_name, checksum)
+            print("Checksum has been changed.")
 
             csv_data: List[Dict[str, Any]] = read_csv_data(destination_path)
 
@@ -108,5 +130,5 @@ async def main(
         "timestamp": timestamp,
     }
 
-    print(response)
+    print(json.dumps(response, indent=4))
     return response
