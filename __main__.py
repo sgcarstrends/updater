@@ -10,7 +10,7 @@ import create_package_zip
 
 load_dotenv()
 
-PROJECT_NAME = f"{pulumi.get_stack()}-{pulumi.get_project()}"
+PROJECT_NAME = f"{pulumi.get_project()}-{pulumi.get_stack()}"
 
 MEMORY_SIZE = 1024
 TIMEOUT = 15
