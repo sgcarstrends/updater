@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "updater"
-version = "1.0.5"
+version = "1.0.6"
 description = ""
 authors = ["Ru Chern Chong <ruchern.chong@sgcarstrends.com>"]
 readme = "README.md"
