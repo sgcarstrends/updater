@@ -39,9 +39,15 @@ async def run_aggregations(collection: Collection) -> None:
                 "$addFields": {
                     "make": {
                         "$replaceAll": {
-                            "input": "$make",
-                            "find": ".",
-                            "replacement": "",
+                            "input": {
+                                "$replaceAll": {
+                                    "input": "$make",
+                                    "find": ".",
+                                    "replacement": "",
+                                }
+                            },
+                            "find": "-",
+                            "replacement": " ",
                         }
                     },
                     "vehicle_type": {
