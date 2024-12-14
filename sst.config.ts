@@ -5,7 +5,7 @@ import { CronArgs } from "./.sst/platform/src/components/aws/cron";
 export default $config({
   app(input) {
     return {
-      name: "sgcarstrends-updater-v2",
+      name: "sgcarstrends-updater",
       removal: input?.stage === "prod" ? "retain" : "remove",
       home: "aws",
       providers: {
