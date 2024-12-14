@@ -1,6 +1,5 @@
-import { carsTable, coeTable } from "../schema";
+import { carsTable } from "@/schema";
 import { updater } from "./updater";
-import { updateCOE } from "./updateCOE";
 
 export const updateCars = async () => {
   const zipFileName = "Monthly New Registration of Cars by Make.zip";

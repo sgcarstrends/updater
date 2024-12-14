@@ -1,4 +1,4 @@
-import { coeTable } from "../schema";
+import { coeTable } from "@/schema";
 import { updater } from "./updater";
 
 export const updateCOE = async () => {

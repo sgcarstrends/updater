@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { createUniqueKey } from "../createUniqueKey";
+import { createUniqueKey } from "@/utils/createUniqueKey";
 
 describe("createUniqueKey", () => {
   it("should create a unique key from a single field", () => {

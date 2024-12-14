@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { calculateChecksum } from "../calculateChecksum";
+import { calculateChecksum } from "@/utils/calculateChecksum";
 import { writeFile, unlink } from "node:fs/promises";
 import { join } from "node:path";
 import crypto from "node:crypto";
