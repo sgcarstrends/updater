@@ -8,12 +8,12 @@ import { redis } from "@/config/redis";
  * @returns Promise resolving to true if successful, null if failed
  */
 export const cacheChecksum = async (fileName: string, checksum: string) => {
-  try {
-    return redis.set(`checksum:${fileName}`, checksum);
-  } catch (error) {
-    console.error(`Error caching checksum: ${error}`);
-    return null;
-  }
+	try {
+		return redis.set(`checksum:${fileName}`, checksum);
+	} catch (error) {
+		console.error(`Error caching checksum: ${error}`);
+		return null;
+	}
 };
 
 /**
@@ -23,10 +23,10 @@ export const cacheChecksum = async (fileName: string, checksum: string) => {
  * @returns Promise resolving to the cached checksum string or null if not found/error
  */
 export const getCachedChecksum = async (fileName: string) => {
-  try {
-    return redis.get<string>(`checksum:${fileName}`);
-  } catch (error) {
-    console.error(`Error retrieving cached checksum: ${error}`);
-    return null;
-  }
+	try {
+		return redis.get<string>(`checksum:${fileName}`);
+	} catch (error) {
+		console.error(`Error retrieving cached checksum: ${error}`);
+		return null;
+	}
 };
