@@ -1,15 +1,13 @@
 {
-  "name": "@sgcarstrends/updater-v2",
-  "version": "1.0.0",
+  "name": "@sgcarstrends/updater",
+  "version": "2.0.0-beta.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "dev": "sst dev --stage dev",
     "test": "vitest",
     "test:coverage": "vitest run --coverage"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Ru Chern CHONG <ruchern.chong@sgcarstrends.com>",
   "license": "ISC",
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
