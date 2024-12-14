@@ -16,22 +16,27 @@ export default $config({
     };
   },
   async run() {
+    const DATABASE_URL = new sst.Secret(
+      "DATABASE_URL",
+      process.env.DATABASE_URL!,
+    );
+    const UPSTASH_REDIS_REST_URL = new sst.Secret(
+      "UPSTASH_REDIS_REST_URL",
+      process.env.UPSTASH_REDIS_REST_URL!,
+    );
+    const UPSTASH_REDIS_REST_TOKEN = new sst.Secret(
+      "UPSTASH_REDIS_REST_TOKEN",
+      process.env.UPSTASH_REDIS_REST_TOKEN!,
+    );
+
     const updateCars = new sst.aws.Function("UpdateCars", {
+      link: [DATABASE_URL, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN],
       handler: "src/lib/updateCars.handler",
-      environment: {
-        DATABASE_URL: process.env.DATABASE_URL!,
-        UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL!,
-        UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN!,
-      },
     });
 
     const updateCOE = new sst.aws.Function("UpdateCOE", {
+      link: [DATABASE_URL, UPSTASH_REDIS_REST_URL, UPSTASH_REDIS_REST_TOKEN],
       handler: "src/lib/updateCOE.handler",
-      environment: {
-        DATABASE_URL: process.env.DATABASE_URL!,
-        UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL!,
-        UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN!,
-      },
     });
 
     const CRON_SCHEDULERS: Record<string, CronArgs> = {

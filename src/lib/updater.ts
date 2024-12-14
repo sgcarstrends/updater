@@ -1,12 +1,12 @@
-import { downloadFile } from "../utils/downloadFile";
-import { AWS_LAMBDA_TEMP_DIR } from "../config";
+import { downloadFile } from "@/utils/downloadFile";
+import { AWS_LAMBDA_TEMP_DIR } from "@/config";
 import path from "node:path";
-import { calculateChecksum } from "../utils/calculateChecksum";
-import { cacheChecksum, getCachedChecksum } from "../utils/redisCache";
-import { processCSV } from "../utils/processCSV";
-import { db } from "../db";
+import { calculateChecksum } from "@/utils/calculateChecksum";
+import { cacheChecksum, getCachedChecksum } from "@/utils/redisCache";
+import { processCSV } from "@/utils/processCSV";
+import { db } from "@/db";
 import { PgTable } from "drizzle-orm/pg-core";
-import { createUniqueKey } from "../utils/createUniqueKey";
+import { createUniqueKey } from "@/utils/createUniqueKey";
 
 export interface UpdaterConfig<T extends PgTable> {
   table: T;
@@ -23,65 +23,81 @@ export interface UpdaterResult {
 
 const BATCH_SIZE = 5000;
 
-const downloadAndPrepareFile = async (zipUrl: string): Promise<string> => {
+export const updater = async <T extends PgTable>({
+  table,
+  zipFileName,
+  zipUrl,
+  keyFields,
+}: UpdaterConfig<T>): Promise<UpdaterResult> => {
+  // Download and extract file
   const extractedFileName = await downloadFile(zipUrl);
   const destinationPath = path.join(AWS_LAMBDA_TEMP_DIR, extractedFileName);
   console.log("Destination path:", destinationPath);
-  return destinationPath;
-};
 
-const validateFileChecksum = async (
-  extractedFileName: string,
-  destinationPath: string,
-): Promise<{ checksum: string; isNewOrChanged: boolean }> => {
+  // Calculate checksum of the downloaded file
   const checksum = await calculateChecksum(destinationPath);
   console.log("Checksum:", checksum);
 
+  // Get previously stored checksum
   const cachedChecksum = await getCachedChecksum(extractedFileName);
   console.log("Cached checksum:", cachedChecksum);
 
   if (!cachedChecksum) {
     console.log(`No cached checksum found. This might be the first run.`);
     await cacheChecksum(extractedFileName, checksum);
-    return { checksum, isNewOrChanged: true };
-  }
+    console.log(`Checksum for ${zipFileName} cached. Checksum: ${checksum}`);
 
-  const isNewOrChanged = cachedChecksum !== checksum;
-  if (!isNewOrChanged) {
     console.log(
-      `File has not been changed since the last update. Checksum: ${checksum}`,
+      `No cached checksum found. This might be the first run. Checksum for ${zipFileName} cached. Checksum: ${checksum}`,
     );
+  } else if (cachedChecksum === checksum) {
+    console.log(
+      `File have not been changed since the last update. Checksum: ${checksum}`,
+    );
+    return {
+      recordsProcessed: 0,
+      message: `File have not been changed since the last update. Checksum: ${checksum}`,
+      timestamp: new Date().toISOString(),
+    };
   }
 
-  return { checksum, isNewOrChanged };
-};
+  await cacheChecksum(extractedFileName, checksum);
+  console.log("Checksum has been changed.");
 
-const findNewRecords = async <T extends PgTable>(
-  table: T,
-  processedData: Record<string, any>[],
-  keyFields: string[],
-): Promise<Record<string, any>[]> => {
+  // Process CSV
+  const processedData = await processCSV(destinationPath);
+
+  // Create a query to check for existing records
   const existingKeysQuery = await db
     .select(Object.fromEntries(keyFields.map((field) => [field, table[field]])))
     .from(table);
 
+  // Create a Set of existing keys for faster lookup
   const existingKeys = new Set(
     existingKeysQuery.map((record) => createUniqueKey(record, keyFields)),
   );
 
-  return processedData.filter((record) => {
+  // Check against the existing records for new non-duplicated entries
+  const newRecords = processedData.filter((record: Record<string, any>) => {
     const identifier = createUniqueKey(record, keyFields);
     return !existingKeys.has(identifier);
   });
-};
 
-const insertRecordBatches = async <T extends PgTable>(
-  table: T,
-  newRecords: Record<string, any>[],
-): Promise<{ totalInserted: number; duration: number }> => {
+  // Return early when there are no new records to be added to the database
+  if (newRecords.length === 0) {
+    return {
+      // table: table.$name,
+      recordsProcessed: 0,
+      message:
+        "No new data to insert. The provided data matches the existing records.",
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  // Process in batches only if we have new records
   let totalInserted = 0;
-  const start = performance.now();
 
+  const start = performance.now();
   for (let i = 0; i < newRecords.length; i += BATCH_SIZE) {
     const batch = newRecords.slice(i, i + BATCH_SIZE);
     const inserted = await db.insert(table).values(batch).returning();
@@ -90,74 +106,14 @@ const insertRecordBatches = async <T extends PgTable>(
       `Inserted batch of ${inserted.length} records. Total: ${totalInserted}`,
     );
   }
-
   const end = performance.now();
-  const duration = Math.round(end - start);
 
-  return { totalInserted, duration };
-};
+  await cacheChecksum(extractedFileName, checksum);
 
-export const updater = async <T extends PgTable>({
-  table,
-  zipFileName,
-  zipUrl,
-  keyFields,
-}: UpdaterConfig<T>): Promise<UpdaterResult> => {
-  try {
-    // Download and prepare file
-    const destinationPath = await downloadAndPrepareFile(zipUrl);
-
-    // Validate file checksum
-    const { checksum, isNewOrChanged } = await validateFileChecksum(
-      zipFileName,
-      destinationPath,
-    );
-
-    // If file is not changed, return early
-    if (!isNewOrChanged) {
-      return {
-        recordsProcessed: 0,
-        message: `File has not been changed since the last update. Checksum: ${checksum}`,
-        timestamp: new Date().toISOString(),
-      };
-    }
-
-    // Process CSV
-    const processedData = await processCSV(destinationPath);
-
-    // Find new records
-    const newRecords = await findNewRecords(table, processedData, keyFields);
-
-    // Return early if no new records
-    if (newRecords.length === 0) {
-      return {
-        recordsProcessed: 0,
-        message:
-          "No new data to insert. The provided data matches existing records.",
-        timestamp: new Date().toISOString(),
-      };
-    }
-
-    // Insert records in batches
-    const { totalInserted, duration } = await insertRecordBatches(
-      table,
-      newRecords,
-    );
-
-    // Cache the new checksum
-    await cacheChecksum(zipFileName, checksum);
-
-    return {
-      recordsProcessed: totalInserted,
-      message: `${totalInserted} record(s) inserted in ${duration}ms`,
-      timestamp: new Date().toISOString(),
-    };
-  } catch (error) {
-    console.error("Error in updater:", error);
-    return {
-      recordsProcessed: 0,
-      message: `Error during update: ${error instanceof Error ? error.message : "Unknown error"}`,
-      timestamp: new Date().toISOString(),
-    };
-  }
+  return {
+    // table: table.$name,
+    recordsProcessed: totalInserted,
+    message: `${totalInserted} record(s) inserted in ${Math.round(end - start)}ms`,
+    timestamp: new Date().toISOString(),
+  };
 };

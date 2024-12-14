@@ -1,5 +1,5 @@
 import AdmZip from "adm-zip";
-import { AWS_LAMBDA_TEMP_DIR } from "../config";
+import { AWS_LAMBDA_TEMP_DIR } from "@/config";
 
 export const downloadFile = async (url: string) => {
   try {
