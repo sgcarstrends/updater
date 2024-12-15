@@ -10,9 +10,7 @@ on:
         required: true
         type: string
     secrets:
-      MONGODB_URI:
-        required: true
-      MONGODB_DB_NAME:
+      DATABASE_URL:
         required: true
       UPSTASH_REDIS_REST_URL:
         required: true
@@ -28,8 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
-      MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      MONGODB_DB_NAME: ${{ secrets.MONGODB_DB_NAME }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
       UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
     steps:
