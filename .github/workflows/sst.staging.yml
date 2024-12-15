@@ -5,6 +5,10 @@ on:
     branches:
       - '*'
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   Test:
     runs-on: ubuntu-latest
