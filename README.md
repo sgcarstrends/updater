@@ -2,7 +2,7 @@
 
 ## Description
 
-A serverless application for updating car trends data.
+Scheduler for downloading and updating cars and COE data.
 
 ## Prerequisites
 
