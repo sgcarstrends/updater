@@ -40,7 +40,7 @@ Migrations are managed using Drizzle Kit. Run `pnpm migrate` to apply database s
 
 ## License
 
-ISC
+MIT License
 
 ## Author
 

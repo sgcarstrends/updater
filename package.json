@@ -9,7 +9,7 @@
 		"migrate": "drizzle-kit migrate"
 	},
 	"author": "Ru Chern Chong <ruchern.chong@sgcarstrends.com>",
-	"license": "ISC",
+	"license": "MIT",
 	"dependencies": {
 		"@neondatabase/serverless": "^0.10.4",
 		"@upstash/redis": "^1.34.3",
