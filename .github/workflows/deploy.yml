@@ -45,6 +45,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
         run: pnpm install
+      - name: Run Drizzle Migrations
+        run: |
+          pnpm migrate
       - name: Deploy
         run: |
           pnpm sst deploy --stage ${{ inputs.stage-name }}

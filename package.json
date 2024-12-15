@@ -5,7 +5,8 @@
 	"scripts": {
 		"dev": "sst dev --stage dev",
 		"test": "vitest",
-		"test:coverage": "vitest run --coverage"
+		"test:coverage": "vitest run --coverage",
+		"migrate": "drizzle-kit migrate"
 	},
 	"author": "Ru Chern CHONG <ruchern.chong@sgcarstrends.com>",
 	"license": "ISC",
