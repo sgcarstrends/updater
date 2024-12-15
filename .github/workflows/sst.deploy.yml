@@ -1,4 +1,4 @@
-name: Deploy
+name: SST Deploy
 
 on:
   workflow_call:
@@ -6,7 +6,7 @@ on:
       environment:
         required: true
         type: string
-      stage-name:
+      sst-stage:
         required: true
         type: string
     secrets:
@@ -22,13 +22,22 @@ on:
         required: true
 
 jobs:
-  Deploy:
+  Deployer:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
       UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+
+    # Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
+    concurrency:
+      group: merge-${{ github.ref }}
+
+    permissions:
+      id-token: write
+      contents: read
+
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -50,4 +59,4 @@ jobs:
           pnpm migrate
       - name: Deploy
         run: |
-          pnpm sst deploy --stage ${{ inputs.stage-name }}
+          pnpm sst deploy --stage ${{ inputs.sst-stage }}
