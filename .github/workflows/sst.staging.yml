@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  Test:
+  test:
     runs-on: ubuntu-latest
     environment: Staging
     steps:
@@ -31,7 +31,7 @@ jobs:
         run: pnpm test
 
   Deploy:
-    needs: Test
+    needs: test
     uses: ./.github/workflows/sst.deploy.yml
     with:
       environment: Staging
