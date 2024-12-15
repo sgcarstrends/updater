@@ -8,7 +8,7 @@
 		"test:coverage": "vitest run --coverage",
 		"migrate": "drizzle-kit migrate"
 	},
-	"author": "Ru Chern CHONG <ruchern.chong@sgcarstrends.com>",
+	"author": "Ru Chern Chong <ruchern.chong@sgcarstrends.com>",
 	"license": "ISC",
 	"dependencies": {
 		"@neondatabase/serverless": "^0.10.4",
@@ -27,7 +27,6 @@
 		"@types/papaparse": "^5.3.15",
 		"@vitest/coverage-v8": "2.1.8",
 		"drizzle-kit": "^0.29.0",
-		"prettier": "^3.4.1",
 		"vitest": "^2.1.8"
 	}
 }
