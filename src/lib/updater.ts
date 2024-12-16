@@ -42,28 +42,27 @@ export const updater = async <T extends PgTable>({
 	const cachedChecksum = await getCachedChecksum(extractedFileName);
 	console.log("Cached checksum:", cachedChecksum);
 
-	// TODO: Temporary disable caching while testing
-	// if (!cachedChecksum) {
-	//   console.log(`No cached checksum found. This might be the first run.`);
-	//   await cacheChecksum(extractedFileName, checksum);
-	//   console.log(`Checksum for ${zipFileName} cached. Checksum: ${checksum}`);
-	//
-	//   console.log(
-	//     `No cached checksum found. This might be the first run. Checksum for ${zipFileName} cached. Checksum: ${checksum}`,
-	//   );
-	// } else if (cachedChecksum === checksum) {
-	//   console.log(
-	//     `File have not been changed since the last update. Checksum: ${checksum}`,
-	//   );
-	//   return {
-	//     recordsProcessed: 0,
-	//     message: `File have not been changed since the last update. Checksum: ${checksum}`,
-	//     timestamp: new Date().toISOString(),
-	//   };
-	// }
-	//
-	// await cacheChecksum(extractedFileName, checksum);
-	// console.log("Checksum has been changed.");
+	if (!cachedChecksum) {
+		console.log("No cached checksum found. This might be the first run.");
+		await cacheChecksum(extractedFileName, checksum);
+		console.log(`Checksum for ${zipFileName} cached. Checksum: ${checksum}`);
+
+		console.log(
+			`No cached checksum found. This might be the first run. Checksum for ${zipFileName} cached. Checksum: ${checksum}`,
+		);
+	} else if (cachedChecksum === checksum) {
+		console.log(
+			`File have not been changed since the last update. Checksum: ${checksum}`,
+		);
+		return {
+			recordsProcessed: 0,
+			message: `File have not been changed since the last update. Checksum: ${checksum}`,
+			timestamp: new Date().toISOString(),
+		};
+	}
+
+	await cacheChecksum(extractedFileName, checksum);
+	console.log("Checksum has been changed.");
 
 	// Process CSV
 	const processedData = await processCSV(destinationPath);
@@ -109,8 +108,7 @@ export const updater = async <T extends PgTable>({
 	}
 	const end = performance.now();
 
-	// TODO: Temporary disable caching while testing
-	// await cacheChecksum(extractedFileName, checksum);
+	await cacheChecksum(extractedFileName, checksum);
 
 	return {
 		// table: table.$name,
