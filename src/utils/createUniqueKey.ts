@@ -1,4 +1,4 @@
 export const createUniqueKey = (
-	item: Record<string, any>,
+	record: Record<string, any>,
 	keyFields: string[],
-) => keyFields.map((field) => item[field]).join("-");
+) => keyFields.map((field) => record[field]).join("-");

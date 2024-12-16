@@ -78,7 +78,7 @@ export const updater = async <T extends PgTable>({
 	);
 
 	// Check against the existing records for new non-duplicated entries
-	const newRecords = processedData.filter((record: Record<string, any>) => {
+	const newRecords = processedData.filter((record) => {
 		const identifier = createUniqueKey(record, keyFields);
 		return !existingKeys.has(identifier);
 	});
