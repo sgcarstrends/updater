@@ -1,3 +1,4 @@
+import redis from "@/config/redis";
 import { schedulers } from "@/config/schedulers";
 import { updateCOE } from "@/lib/updateCOE";
 import { logger, schedules } from "@trigger.dev/sdk/v3";
