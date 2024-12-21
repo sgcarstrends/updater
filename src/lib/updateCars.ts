@@ -4,8 +4,8 @@ import { cleanSpecialChars } from "@/utils/cleanSpecialChars";
 import { updater } from "./updater";
 
 export const updateCars = async () => {
-  const zipFileName = "Monthly New Registration of Cars by Make.zip";
-  const zipUrl = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${zipFileName}`;
+  const filename = "Monthly New Registration of Cars by Make.zip";
+  const url = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${filename}`;
   const keyFields: Array<keyof Car> = [
     "month",
     "make",
@@ -15,8 +15,7 @@ export const updateCars = async () => {
 
   const response = await updater<Car>({
     table: cars,
-    zipFileName,
-    zipUrl,
+    url,
     keyFields,
     csvTransformOptions: {
       fields: {
@@ -24,17 +23,7 @@ export const updateCars = async () => {
           cleanSpecialChars(value, { separator: "." }).toUpperCase(),
         vehicle_type: (value: string) =>
           cleanSpecialChars(value, { separator: "/", joinSeparator: "/" }),
-        number: (value: string | number) => {
-          if (value === "") {
-            return 0;
-          }
-
-          if (typeof value === "string" && /\d+,\d+/.test(value)) {
-            return Number.parseInt(value.replace(/,/g, ""), 10);
-          }
-
-          return Number(value);
-        },
+        number: (value: string | number) => (value === "" ? 0 : Number(value)),
       },
     },
   });

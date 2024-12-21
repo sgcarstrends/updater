@@ -3,8 +3,8 @@ import type { COE } from "@/types";
 import { updater } from "./updater";
 
 export const updateCOE = async () => {
-  const zipFileName = "COE Bidding Results.zip";
-  const zipUrl = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${zipFileName}`;
+  const filename = "COE Bidding Results.zip";
+  const url = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${filename}`;
   const keyFields: Array<keyof COE> = ["month", "bidding_no"];
 
   const parseNumericString = (value: string | number) => {
@@ -23,8 +23,7 @@ export const updateCOE = async () => {
 
   const response = await updater<COE>({
     table: coe,
-    zipFileName,
-    zipUrl,
+    url: url,
     keyFields,
     csvTransformOptions: {
       fields: Object.fromEntries(

@@ -10,8 +10,7 @@ import { type Table, getTableName } from "drizzle-orm";
 
 export interface UpdaterConfig<T> {
   table: Table;
-  zipFileName: string;
-  zipUrl: string;
+  url: string;
   keyFields: string[];
   csvTransformOptions?: CSVTransformOptions<T>;
 }
@@ -27,7 +26,7 @@ const BATCH_SIZE = 5000;
 
 export const updater = async <T>({
   table,
-  zipUrl,
+  url,
   keyFields,
   csvTransformOptions = {},
 }: UpdaterConfig<T>): Promise<UpdaterResult> => {
@@ -35,7 +34,7 @@ export const updater = async <T>({
     const tableName = getTableName(table);
 
     // Download and extract file
-    const extractedFileName = await downloadFile(zipUrl);
+    const extractedFileName = await downloadFile(url);
     const destinationPath = path.join(AWS_LAMBDA_TEMP_DIR, extractedFileName);
     console.log("Destination path:", destinationPath);
 
