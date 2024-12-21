@@ -23,15 +23,15 @@ import { pipeline } from "node:stream/promises";
  * ```
  */
 export const calculateChecksum = async (filePath: string): Promise<string> => {
-	const hash = createHash("sha256");
-	const fileStream = createReadStream(filePath);
+  const hash = createHash("sha256");
+  const fileStream = createReadStream(filePath);
 
-	try {
-		await pipeline(fileStream, hash);
-		return hash.digest("hex");
-	} catch (error) {
-		throw new Error(
-			`Checksum calculation failed: ${error instanceof Error ? error.message : error}`,
-		);
-	}
+  try {
+    await pipeline(fileStream, hash);
+    return hash.digest("hex");
+  } catch (error) {
+    throw new Error(
+      `Checksum calculation failed: ${error instanceof Error ? error.message : error}`,
+    );
+  }
 };

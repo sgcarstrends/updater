@@ -13,13 +13,13 @@ const app = new Hono();
 // });
 
 app.post("/process-cars-data", async (c) => {
-	const response = await updateCars();
-	return c.json(response);
+  const response = await updateCars();
+  return c.json(response);
 });
 
 app.post("/process-coe-data", async (c) => {
-	const response = await updateCOE();
-	return c.json(response);
+  const response = await updateCOE();
+  return c.json(response);
 });
 
 showRoutes(app);
