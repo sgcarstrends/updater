@@ -1,12 +1,13 @@
 import { carsTable } from "@/schema";
+import type { Car } from "@/types";
 import { updater } from "./updater";
 
 export const updateCars = async () => {
   const zipFileName = "Monthly New Registration of Cars by Make.zip";
   const zipUrl = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${zipFileName}`;
-  const keyFields = ["month"];
+  const keyFields: Array<keyof Car> = ["month"];
 
-  const response = await updater({
+  const response = await updater<Car>({
     table: carsTable,
     zipFileName,
     zipUrl,

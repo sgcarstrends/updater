@@ -9,16 +9,16 @@ import { cacheChecksum, getCachedChecksum } from "@/utils/redisCache";
 import { getTableName } from "drizzle-orm";
 import type { PgTable } from "drizzle-orm/pg-core";
 
-export interface UpdaterConfig<T extends PgTable> {
-  table: T;
+export interface UpdaterConfig<T> {
+  table: PgTable;
   zipFileName: string;
   zipUrl: string;
   keyFields: string[];
-  csvTransformOptions?: CSVTransformOptions;
+  csvTransformOptions?: CSVTransformOptions<T>;
 }
 
-export interface UpdaterResult<T extends PgTable> {
-  table: T["_"]["name"];
+export interface UpdaterResult {
+  table: string;
   recordsProcessed: number;
   message: string;
   timestamp: string;
@@ -26,13 +26,12 @@ export interface UpdaterResult<T extends PgTable> {
 
 const BATCH_SIZE = 5000;
 
-export const updater = async <T extends PgTable>({
+export const updater = async <T>({
   table,
-  zipFileName,
   zipUrl,
   keyFields,
   csvTransformOptions = {},
-}: UpdaterConfig<T>): Promise<UpdaterResult<T>> => {
+}: UpdaterConfig<T>): Promise<UpdaterResult> => {
   const tableName = getTableName(table);
 
   // Download and extract file
@@ -71,7 +70,9 @@ export const updater = async <T extends PgTable>({
 
   // Create a query to check for existing records
   const existingKeysQuery = await db
-    .select(Object.fromEntries(keyFields.map((field) => [field, table[field]])))
+    .select({
+      ...Object.fromEntries(keyFields.map((field) => [field, table[field]])),
+    })
     .from(table);
 
   // Create a Set of existing keys for faster lookup

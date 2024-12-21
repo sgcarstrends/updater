@@ -1,20 +1,19 @@
 import fs from "node:fs";
 import Papa from "papaparse";
 
-export interface CSVTransformOptions {
-  fields?: Record<string, (value: any) => any>;
+export interface CSVTransformOptions<T> {
+  fields?: { [K in keyof T]?: unknown };
 }
 
-export const processCSV = async (
+export const processCSV = async <T>(
   filePath: string,
-  options: CSVTransformOptions = {},
-) => {
+  options: CSVTransformOptions<T> = {},
+): Promise<any[]> => {
   const fileContent = fs.readFileSync(filePath, "utf-8");
 
   const { fields = {} } = options;
-  console.log("fields", fields);
 
-  const { data } = Papa.parse(fileContent, {
+  const { data } = Papa.parse<T>(fileContent, {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true,

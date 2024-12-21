@@ -1,10 +1,11 @@
 import { coeTable } from "@/schema";
+import type { COE } from "@/types";
 import { updater } from "./updater";
 
 export const updateCOE = async () => {
   const zipFileName = "COE Bidding Results.zip";
   const zipUrl = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${zipFileName}`;
-  const keyFields = ["month", "bidding_no"];
+  const keyFields: Array<keyof COE> = ["month", "bidding_no"];
 
   const parseNumericString = (value: string | number) => {
     if (typeof value === "string") {
@@ -14,9 +15,13 @@ export const updateCOE = async () => {
     return value;
   };
 
-  const parseNumericFields = ["quota", "bids_success", "bids_received"];
+  const parseNumericFields: Array<keyof COE> = [
+    "quota",
+    "bids_success",
+    "bids_received",
+  ];
 
-  const response = await updater({
+  const response = await updater<COE>({
     table: coeTable,
     zipFileName,
     zipUrl,
