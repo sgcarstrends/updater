@@ -9,22 +9,29 @@ export const processCSV = async (filePath: string) => {
 		dynamicTyping: true,
 		skipEmptyLines: true,
 		transform: (value, field) => {
+			const trimmedValue = value.trim();
+
 			// Handle empty number field
-			if (field === "number" && value === "") {
+			if (field === "number" && trimmedValue === "") {
 				return 0;
 			}
 
 			// Clean up make field
 			if (field === "make") {
-				return value.trim().replace(/\./g, "");
+				return trimmedValue.replace(/\./g, "");
+			}
+
+			// Clean up vehicle_type field
+			if (field === "vehicle_type") {
+				return trimmedValue.replace(/\s*\/\s*/g, "/");
 			}
 
 			// Handle numeric values with commas
-			if (/\d+,\d+/.test(value)) {
-				return Number.parseInt(value.replace(/,/g, ""), 10);
+			if (/\d+,\d+/.test(trimmedValue)) {
+				return Number.parseInt(trimmedValue.replace(/,/g, ""), 10);
 			}
 
-			return value;
+			return trimmedValue;
 		},
 	});
 
