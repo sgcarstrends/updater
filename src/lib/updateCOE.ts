@@ -1,4 +1,4 @@
-import { coeTable } from "@/schema";
+import { coe } from "@/schema";
 import type { COE } from "@/types";
 import { updater } from "./updater";
 
@@ -22,7 +22,7 @@ export const updateCOE = async () => {
   ];
 
   const response = await updater<COE>({
-    table: coeTable,
+    table: coe,
     zipFileName,
     zipUrl,
     keyFields,

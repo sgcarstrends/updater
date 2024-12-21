@@ -1,6 +1,6 @@
 import { index, integer, pgTable, text, uuid } from "drizzle-orm/pg-core";
 
-export const carsTable = pgTable(
+export const cars = pgTable(
   "cars",
   {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -21,7 +21,7 @@ export const carsTable = pgTable(
   ],
 );
 
-export const coeTable = pgTable(
+export const coe = pgTable(
   "coe",
   {
     id: uuid("id").defaultRandom().primaryKey(),
@@ -47,8 +47,8 @@ export const coeTable = pgTable(
   ],
 );
 
-export type InsertCar = typeof carsTable.$inferInsert;
-export type SelectCar = typeof carsTable.$inferSelect;
+export type InsertCar = typeof cars.$inferInsert;
+export type SelectCar = typeof cars.$inferSelect;
 
-export type InsertCOE = typeof coeTable.$inferInsert;
-export type SelectCOE = typeof coeTable.$inferSelect;
+export type InsertCOE = typeof coe.$inferInsert;
+export type SelectCOE = typeof coe.$inferSelect;

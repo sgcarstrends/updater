@@ -6,11 +6,10 @@ import { createUniqueKey } from "@/utils/createUniqueKey";
 import { downloadFile } from "@/utils/downloadFile";
 import { type CSVTransformOptions, processCSV } from "@/utils/processCSV";
 import { cacheChecksum, getCachedChecksum } from "@/utils/redisCache";
-import { getTableName } from "drizzle-orm";
-import type { PgTable } from "drizzle-orm/pg-core";
+import { type Table, getTableName } from "drizzle-orm";
 
 export interface UpdaterConfig<T> {
-  table: PgTable;
+  table: Table;
   zipFileName: string;
   zipUrl: string;
   keyFields: string[];

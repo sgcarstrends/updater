@@ -1,4 +1,4 @@
-import { carsTable } from "@/schema";
+import { cars } from "@/schema";
 import type { Car } from "@/types";
 import { updater } from "./updater";
 
@@ -8,7 +8,7 @@ export const updateCars = async () => {
   const keyFields: Array<keyof Car> = ["month"];
 
   const response = await updater<Car>({
-    table: carsTable,
+    table: cars,
     zipFileName,
     zipUrl,
     keyFields,
