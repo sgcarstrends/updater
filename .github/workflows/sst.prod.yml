@@ -11,7 +11,7 @@ permissions:
   contents: read
 
 jobs:
-  Deploy:
+  deploy:
     uses: ./.github/workflows/sst.deploy.yml
     with:
       environment: Production

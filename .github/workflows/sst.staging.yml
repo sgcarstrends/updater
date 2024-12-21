@@ -30,7 +30,7 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-  Deploy:
+  deploy:
     needs: test
     uses: ./.github/workflows/sst.deploy.yml
     with:

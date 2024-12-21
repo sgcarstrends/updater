@@ -22,7 +22,7 @@ on:
         required: true
 
 jobs:
-  Deployer:
+  deployer:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
