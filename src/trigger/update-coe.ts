@@ -24,4 +24,11 @@ export const updateCOETask = schedules.task({
       throw error;
     }
   },
+  onSuccess: async () => {
+    const now = new Date().getTime();
+
+    await redis.set("lastUpdated:coe", now);
+
+    logger.log("COE: Last updated", { timestamp: now });
+  },
 });

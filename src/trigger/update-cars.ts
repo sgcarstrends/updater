@@ -24,4 +24,11 @@ export const updateCarsTask = schedules.task({
       throw error;
     }
   },
+  onSuccess: async () => {
+    const now = new Date().getTime();
+
+    await redis.set("lastUpdated:cars", now);
+
+    logger.log("Cars: Last updated", { timestamp: now });
+  },
 });
