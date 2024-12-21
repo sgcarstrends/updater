@@ -1,8 +1,10 @@
+import { schedulers } from "@/config/schedulers";
 import { updateCars } from "@/lib/updateCars";
-import { logger, task } from "@trigger.dev/sdk/v3";
+import { logger, schedules } from "@trigger.dev/sdk/v3";
 
-export const updateCarsTask = task({
+export const updateCarsTask = schedules.task({
   id: "update-cars",
+  cron: schedulers.cars,
   run: async (payload: any, { ctx }) => {
     try {
       logger.log("Starting Cars Update Task", { payload, ctx });
