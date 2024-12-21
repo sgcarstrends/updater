@@ -1,37 +1,31 @@
 import fs from "node:fs";
 import Papa from "papaparse";
 
-export const processCSV = async (filePath: string) => {
+export interface CSVTransformOptions {
+  fields?: Record<string, (value: any) => any>;
+}
+
+export const processCSV = async (
+  filePath: string,
+  options: CSVTransformOptions = {},
+) => {
   const fileContent = fs.readFileSync(filePath, "utf-8");
+
+  const { fields = {} } = options;
+  console.log("fields", fields);
 
   const { data } = Papa.parse(fileContent, {
     header: true,
     dynamicTyping: true,
     skipEmptyLines: true,
     transform: (value, field) => {
-      const trimmedValue = value.trim();
-
-      // Handle empty number field
-      if (field === "number" && trimmedValue === "") {
-        return 0;
+      // Check for specific field transformations
+      if (fields[field]) {
+        return fields[field](value);
       }
 
-      // Clean up make field
-      if (field === "make") {
-        return trimmedValue.replace(/\./g, "");
-      }
-
-      // Clean up vehicle_type field
-      if (field === "vehicle_type") {
-        return trimmedValue.replace(/\s*\/\s*/g, "/");
-      }
-
-      // Handle numeric values with commas
-      if (/\d+,\d+/.test(trimmedValue)) {
-        return Number.parseInt(trimmedValue.replace(/,/g, ""), 10);
-      }
-
-      return trimmedValue;
+      // Default trim
+      return typeof value === "string" ? value.trim() : value;
     },
   });
 

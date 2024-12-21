@@ -6,11 +6,26 @@ export const updateCOE = async () => {
   const zipUrl = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${zipFileName}`;
   const keyFields = ["month", "bidding_no"];
 
+  const parseNumericString = (value: string | number) => {
+    if (typeof value === "string") {
+      return Number.parseInt(value.replace(/,/g, ""), 10);
+    }
+
+    return value;
+  };
+
+  const parseNumericFields = ["quota", "bids_success", "bids_received"];
+
   const response = await updater({
     table: coeTable,
     zipFileName,
     zipUrl,
     keyFields,
+    csvTransformOptions: {
+      fields: Object.fromEntries(
+        parseNumericFields.map((field) => [field, parseNumericString]),
+      ),
+    },
   });
   console.log("response", response);
 

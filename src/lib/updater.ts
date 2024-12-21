@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { calculateChecksum } from "@/utils/calculateChecksum";
 import { createUniqueKey } from "@/utils/createUniqueKey";
 import { downloadFile } from "@/utils/downloadFile";
-import { processCSV } from "@/utils/processCSV";
+import { type CSVTransformOptions, processCSV } from "@/utils/processCSV";
 import { cacheChecksum, getCachedChecksum } from "@/utils/redisCache";
 import { getTableName } from "drizzle-orm";
 import type { PgTable } from "drizzle-orm/pg-core";
@@ -14,6 +14,7 @@ export interface UpdaterConfig<T extends PgTable> {
   zipFileName: string;
   zipUrl: string;
   keyFields: string[];
+  csvTransformOptions?: CSVTransformOptions;
 }
 
 export interface UpdaterResult<T extends PgTable> {
@@ -30,6 +31,7 @@ export const updater = async <T extends PgTable>({
   zipFileName,
   zipUrl,
   keyFields,
+  csvTransformOptions = {},
 }: UpdaterConfig<T>): Promise<UpdaterResult<T>> => {
   const tableName = getTableName(table);
 
@@ -49,11 +51,6 @@ export const updater = async <T extends PgTable>({
   if (!cachedChecksum) {
     console.log("No cached checksum found. This might be the first run.");
     await cacheChecksum(extractedFileName, checksum);
-    console.log(`Checksum for ${zipFileName} cached. Checksum: ${checksum}`);
-
-    console.log(
-      `No cached checksum found. This might be the first run. Checksum for ${zipFileName} cached. Checksum: ${checksum}`,
-    );
   } else if (cachedChecksum === checksum) {
     console.log(
       `File have not been changed since the last update. Checksum: ${checksum}`,
@@ -69,8 +66,8 @@ export const updater = async <T extends PgTable>({
   await cacheChecksum(extractedFileName, checksum);
   console.log("Checksum has been changed.");
 
-  // Process CSV
-  const processedData = await processCSV(destinationPath);
+  // Process CSV with custom transformations
+  const processedData = await processCSV(destinationPath, csvTransformOptions);
 
   // Create a query to check for existing records
   const existingKeysQuery = await db

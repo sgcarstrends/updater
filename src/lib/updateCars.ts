@@ -11,6 +11,23 @@ export const updateCars = async () => {
     zipFileName,
     zipUrl,
     keyFields,
+    csvTransformOptions: {
+      fields: {
+        make: (value: string) => value.trim().replace(/\./g, ""),
+        vehicle_type: (value: string) => value.trim().replace(/\s*\/\s*/g, "/"),
+        number: (value: string | number) => {
+          if (value === "") {
+            return 0;
+          }
+
+          if (typeof value === "string" && /\d+,\d+/.test(value)) {
+            return Number.parseInt(value.replace(/,/g, ""), 10);
+          }
+
+          return Number(value);
+        },
+      },
+    },
   });
   console.log("response", response);
 
