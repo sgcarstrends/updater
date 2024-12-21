@@ -35,10 +35,10 @@ export default $config({
     // );
 
     // TODO: Might create an API in the future
-    new sst.aws.Function("Updater", {
-      handler: "src/index.handler",
-      environment,
-      url: true,
-    });
+    // new sst.aws.Function("Updater", {
+    //   handler: "src/index.handler",
+    //   environment,
+    //   url: true,
+    // });
   },
 });
