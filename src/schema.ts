@@ -11,17 +11,14 @@ export const carsTable = pgTable(
     vehicle_type: text("vehicle_type"),
     number: integer("number"),
   },
-  (table) => ({
-    monthMakeIdx: index("month_make_idx").on(table.month, table.make),
-    monthIdx: index("month_idx").on(table.month),
-    makeIdx: index("make_idx").on(table.make),
-    fuelTypeIdx: index("fuel_type_idx").on(table.fuel_type),
-    makeFuelTypeIdx: index("make_fuel_type_idx").on(
-      table.make,
-      table.fuel_type,
-    ),
-    numberIdx: index("number_idx").on(table.number),
-  }),
+  (table) => [
+    index("month_make_idx").on(table.month, table.make),
+    index("month_idx").on(table.month),
+    index("make_idx").on(table.make),
+    index("fuel_type_idx").on(table.fuel_type),
+    index("make_fuel_type_idx").on(table.make, table.fuel_type),
+    index("number_idx").on(table.number),
+  ],
 );
 
 export const coeTable = pgTable(
@@ -36,22 +33,18 @@ export const coeTable = pgTable(
     bids_received: integer("bids_received"),
     premium: integer("premium"),
   },
-  (table) => ({
-    monthVehicleIdx: index("month_vehicle_idx").on(
-      table.month,
+  (table) => [
+    index("month_vehicle_idx").on(table.month, table.vehicle_class),
+    index("vehicle_class_idx").on(table.vehicle_class),
+    index("month_bidding_no_idx").on(table.month, table.bidding_no),
+    index("premium_idx").on(table.premium),
+    index("bids_idx").on(table.bids_success, table.bids_received),
+    index("month_bidding_no_vehicle_class_idx").on(
+      table.month.desc(),
+      table.bidding_no.desc(),
       table.vehicle_class,
     ),
-    vehicleClassIdx: index("vehicle_class_idx").on(table.vehicle_class),
-    monthBiddingNoIdx: index("month_bidding_no_idx").on(
-      table.month,
-      table.bidding_no,
-    ),
-    premiumIdx: index("premium_idx").on(table.premium),
-    bidsIdx: index("bids_idx").on(table.bids_success, table.bids_received),
-    monthBiddingNoVehicleClassIdx: index(
-      "month_bidding_no_vehicle_class_idx",
-    ).on(table.month.desc(), table.bidding_no.desc(), table.vehicle_class),
-  }),
+  ],
 );
 
 export type InsertCar = typeof carsTable.$inferInsert;
