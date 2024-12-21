@@ -1,10 +1,11 @@
+import { LTA_DATAMALL_BASE_URL } from "@/config";
 import { coe } from "@/schema";
 import type { COE } from "@/types";
 import { updater } from "./updater";
 
 export const updateCOE = async () => {
   const filename = "COE Bidding Results.zip";
-  const url = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${filename}`;
+  const url = `${LTA_DATAMALL_BASE_URL}/${filename}`;
   const keyFields: Array<keyof COE> = ["month", "bidding_no"];
 
   const parseNumericString = (value: string | number) => {

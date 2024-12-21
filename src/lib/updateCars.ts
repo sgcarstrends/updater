@@ -1,3 +1,4 @@
+import { LTA_DATAMALL_BASE_URL } from "@/config";
 import { cars } from "@/schema";
 import type { Car } from "@/types";
 import { cleanSpecialChars } from "@/utils/cleanSpecialChars";
@@ -5,7 +6,7 @@ import { updater } from "./updater";
 
 export const updateCars = async () => {
   const filename = "Monthly New Registration of Cars by Make.zip";
-  const url = `https://datamall.lta.gov.sg/content/dam/datamall/datasets/Facts_Figures/Vehicle%20Registration/${filename}`;
+  const url = `${LTA_DATAMALL_BASE_URL}/${filename}`;
   const keyFields: Array<keyof Car> = [
     "month",
     "make",
