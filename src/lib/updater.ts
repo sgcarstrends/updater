@@ -6,6 +6,7 @@ import { createUniqueKey } from "@/utils/createUniqueKey";
 import { downloadFile } from "@/utils/downloadFile";
 import { processCSV } from "@/utils/processCSV";
 import { cacheChecksum, getCachedChecksum } from "@/utils/redisCache";
+import { getTableName } from "drizzle-orm";
 import type { PgTable } from "drizzle-orm/pg-core";
 
 export interface UpdaterConfig<T extends PgTable> {
@@ -15,7 +16,8 @@ export interface UpdaterConfig<T extends PgTable> {
   keyFields: string[];
 }
 
-export interface UpdaterResult {
+export interface UpdaterResult<T extends PgTable> {
+  table: T["_"]["name"];
   recordsProcessed: number;
   message: string;
   timestamp: string;
@@ -28,7 +30,9 @@ export const updater = async <T extends PgTable>({
   zipFileName,
   zipUrl,
   keyFields,
-}: UpdaterConfig<T>): Promise<UpdaterResult> => {
+}: UpdaterConfig<T>): Promise<UpdaterResult<T>> => {
+  const tableName = getTableName(table);
+
   // Download and extract file
   const extractedFileName = await downloadFile(zipUrl);
   const destinationPath = path.join(AWS_LAMBDA_TEMP_DIR, extractedFileName);
@@ -55,6 +59,7 @@ export const updater = async <T extends PgTable>({
       `File have not been changed since the last update. Checksum: ${checksum}`,
     );
     return {
+      table: tableName,
       recordsProcessed: 0,
       message: `File have not been changed since the last update. Checksum: ${checksum}`,
       timestamp: new Date().toISOString(),
@@ -86,7 +91,7 @@ export const updater = async <T extends PgTable>({
   // Return early when there are no new records to be added to the database
   if (newRecords.length === 0) {
     return {
-      // table: table.$name,
+      table: tableName,
       recordsProcessed: 0,
       message:
         "No new data to insert. The provided data matches the existing records.",
@@ -111,7 +116,7 @@ export const updater = async <T extends PgTable>({
   await cacheChecksum(extractedFileName, checksum);
 
   return {
-    // table: table.$name,
+    table: tableName,
     recordsProcessed: totalInserted,
     message: `${totalInserted} record(s) inserted in ${Math.round(end - start)}ms`,
     timestamp: new Date().toISOString(),
