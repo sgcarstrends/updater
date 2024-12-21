@@ -1,34 +1,9 @@
-import redis from "@/config/redis";
 import { schedulers } from "@/config/schedulers";
 import { updateCars } from "@/lib/updateCars";
-import { logger, schedules } from "@trigger.dev/sdk/v3";
+import { createUpdateTask } from "@/utils/createUpdateTask";
 
-export const updateCarsTask = schedules.task({
-  id: "update-cars",
-  cron: schedulers.cars,
-  run: async (payload: any, { ctx }) => {
-    try {
-      logger.log("Starting Cars Update Task", { payload, ctx });
-
-      const response = await updateCars();
-
-      logger.log("Cars Update Completed", {
-        recordsProcessed: response.recordsProcessed,
-        message: response.message,
-        timestamp: response.timestamp,
-      });
-
-      return response;
-    } catch (error) {
-      logger.error("Cars Update Task Failed", { error });
-      throw error;
-    }
-  },
-  onSuccess: async () => {
-    const now = new Date().getTime();
-
-    await redis.set("lastUpdated:cars", now);
-
-    logger.log("Cars: Last updated", { timestamp: now });
-  },
-});
+export const updateCarsTask = createUpdateTask(
+  "cars",
+  schedulers.cars,
+  updateCars,
+);

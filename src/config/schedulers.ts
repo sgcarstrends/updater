@@ -1,6 +1,6 @@
-type SchedulerName = "cars" | "coe";
+export type SchedulerName = "cars" | "coe";
 
-type ScheduleOptions =
+export type ScheduleOptions =
   | string
   | {
       pattern: string;
