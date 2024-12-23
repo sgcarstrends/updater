@@ -38,31 +38,31 @@ export const updater = async <T>({
     const destinationPath = path.join(AWS_LAMBDA_TEMP_DIR, extractedFileName);
     console.log("Destination path:", destinationPath);
 
-    // // Calculate checksum of the downloaded file
-    // const checksum = await calculateChecksum(destinationPath);
-    // console.log("Checksum:", checksum);
-    //
-    // // Get previously stored checksum
-    // const cachedChecksum = await getCachedChecksum(extractedFileName);
-    // console.log("Cached checksum:", cachedChecksum);
-    //
-    // if (!cachedChecksum) {
-    //   console.log("No cached checksum found. This might be the first run.");
-    //   await cacheChecksum(extractedFileName, checksum);
-    // } else if (cachedChecksum === checksum) {
-    //   console.log(
-    //     `File have not been changed since the last update. Checksum: ${checksum}`,
-    //   );
-    //   return {
-    //     table: tableName,
-    //     recordsProcessed: 0,
-    //     message: `File have not been changed since the last update. Checksum: ${checksum}`,
-    //     timestamp: new Date().toISOString(),
-    //   };
-    // }
-    //
-    // await cacheChecksum(extractedFileName, checksum);
-    // console.log("Checksum has been changed.");
+    // Calculate checksum of the downloaded file
+    const checksum = await calculateChecksum(destinationPath);
+    console.log("Checksum:", checksum);
+
+    // Get previously stored checksum
+    const cachedChecksum = await getCachedChecksum(extractedFileName);
+    console.log("Cached checksum:", cachedChecksum);
+
+    if (!cachedChecksum) {
+      console.log("No cached checksum found. This might be the first run.");
+      await cacheChecksum(extractedFileName, checksum);
+    } else if (cachedChecksum === checksum) {
+      console.log(
+        `File have not been changed since the last update. Checksum: ${checksum}`,
+      );
+      return {
+        table: tableName,
+        recordsProcessed: 0,
+        message: `File have not been changed since the last update. Checksum: ${checksum}`,
+        timestamp: new Date().toISOString(),
+      };
+    }
+
+    await cacheChecksum(extractedFileName, checksum);
+    console.log("Checksum has been changed.");
 
     // Process CSV with custom transformations
     const processedData = await processCSV(
@@ -113,7 +113,7 @@ export const updater = async <T>({
     }
     const end = performance.now();
 
-    // await cacheChecksum(extractedFileName, checksum);
+    await cacheChecksum(extractedFileName, checksum);
 
     return {
       table: tableName,
