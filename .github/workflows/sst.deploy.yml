@@ -22,7 +22,7 @@ on:
         required: true
 
 jobs:
-  deployer:
+  sst-deploy:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
@@ -54,7 +54,9 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> .npmrc  # Add auth token to .npmrc
+          pnpm install
       - name: Run Drizzle Migrations
         run: |
           pnpm migrate
