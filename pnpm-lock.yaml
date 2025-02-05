@@ -18,8 +18,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(@neondatabase/serverless@0.10.4)(@opentelemetry/api@1.9.0)(@types/pg@8.11.6)
       '@trigger.dev/sdk':
-        specifier: ^3.3.7
-        version: 3.3.7(zod@3.23.8)
+        specifier: ^3.3.13
+        version: 3.3.13(zod@3.23.8)
       '@upstash/redis':
         specifier: ^1.34.3
         version: 1.34.3
@@ -61,8 +61,8 @@ importers:
         specifier: ^0.30.1
         version: 0.30.1
       trigger.dev:
-        specifier: ^3.3.7
-        version: 3.3.7
+        specifier: ^3.3.13
+        version: 3.3.13
       vitest:
         specifier: ^3.0.5
         version: 3.0.5(@types/node@22.10.2)(jiti@1.21.7)
@@ -159,62 +159,62 @@ packages:
     resolution: {integrity: sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==}
     engines: {node: '>=0.1.90'}
 
-  '@depot/cli-darwin-arm64@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-nXG6loMJxbfWnKoVvTvrw19GAX3TxsgUy2mnb7sKv06VjUeMvsvBueXAW4lxO5Cf89oim9b0/Agnj/B3IVD2Kg==}
+  '@depot/cli-darwin-arm64@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-H7tQ0zWXVmdYXGFvt3d/v5fmquMlMM1I9JC8C2yiBZ9En9a20hzSbKoiym92RtcfqjKQFvhXL0DT6vQmJ8bgQA==}
     engines: {node: '>=14'}
     cpu: [arm64]
     os: [darwin]
 
-  '@depot/cli-darwin-x64@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-AqkNIIOuzh/8hmwTwu1FIY5Lvez7h4/STO3oPjaalLajV+ZfHgV2xpmbtTwxPmgLVFPaE2e77wzvpRWuFarWwQ==}
+  '@depot/cli-darwin-x64@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-3RDyybnCC2YSvbJCkHxXBYbKR7adUO7U00O9DHreX8EyS2E/C3kQgET+rFXR+iDdeG0h+h+At2rDng7AxvUhDw==}
     engines: {node: '>=14'}
     cpu: [x64]
     os: [darwin]
 
-  '@depot/cli-linux-arm64@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-Rfiil6MAO/SkAK27vaEA1IOPOJq8DgCvm09sfasrXFvpldDYa700Hx7c+V1uuBYfIckVh2S/i7AQjGg535MDjg==}
+  '@depot/cli-linux-arm64@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-Fc1+Guqdsl2WM+b+76FirRjjRvEoYZX0MI4uuIQF9c9gwp6UZSZ5o3U7lAUpdkclVMKXSAW5bsIpgcOfUiJX3w==}
     engines: {node: '>=14'}
     cpu: [arm64]
     os: [linux]
 
-  '@depot/cli-linux-arm@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-/HspMwaVYYPErg372Bk4x7Gno7n8VuaLqaGm39wbZEb9C4S9YAP7r7T0wSywrUZBzJBxX7f+GoHbBic0IQoraQ==}
+  '@depot/cli-linux-arm@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-95kjKwKxP6RKkAhJoPlO6g3drEYpFWy9AC7QfvQMHDRnI3HXgbxA/BSTp4R3C4TTfp5JUPShVf8Js/NAcrUpUQ==}
     engines: {node: '>=14'}
     cpu: [arm]
     os: [linux]
 
-  '@depot/cli-linux-ia32@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-1GHDaNe6KXYjHWNoUrd2GutnseyYt3yrUKmRYKAR+/AU3BW/eQGcRAp50bSu9nntIaL+ByugkR+LjwKJIqRzmg==}
+  '@depot/cli-linux-ia32@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-2KoyIoYqnyIuynPN+mWbugoOB2APiNNvFLKERWOwPa0KYLSfcENT3sYxDW8tDuIw2dftHlmZN73uvXrGFeMcDQ==}
     engines: {node: '>=14'}
     cpu: [ia32]
     os: [linux]
 
-  '@depot/cli-linux-x64@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-CY4IwXT5l2btXbjCYl+85tfF/viz6zdyaWjiu7MUuxxAM+s9bMYl7HKBITHdflx9Z/dRfDGFX8tM1i2AsKBcqA==}
+  '@depot/cli-linux-x64@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-B8xDlXFxhYHD2tUk0jUv7SKipLfWwJVlY7ZhDQixyQzatibXakahdqpvZJgE6FLZJd3lgFIEAVsKURZHa1l57A==}
     engines: {node: '>=14'}
     cpu: [x64]
     os: [linux]
 
-  '@depot/cli-win32-arm64@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-mslCCUzlK53aYstJH6//mPOVTWa8vU2IemBGLFsntgB1f/0fqDdfAskyfu+RVx/ZNqjr2Ih2jtdlfyOA3XKZdw==}
+  '@depot/cli-win32-arm64@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-CPJX691MKEhnKZX25xS+opWESgPQ73HKkEwkAvvVqdBzahndcHoqAeIxYLv2hoCqrDlkH3YCF+DJleLiEP3blA==}
     engines: {node: '>=14'}
     cpu: [arm64]
     os: [win32]
 
-  '@depot/cli-win32-ia32@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-/xsLWyIO7tAHTkFTFO0j9Csc78WnoENeEWROeUWsvAizFX6GF6Toir1xRZbM28yRRlGsOG+KWsFwULyEJkI1Wg==}
+  '@depot/cli-win32-ia32@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-6eewZ1zPEyNL3zcCwC01s3rZNMqMGVu1iv/EPywj3/uk4CNyUBaTlZ3StQ1BLFHPQnU0vk29yOzA5ZEuRLSyxA==}
     engines: {node: '>=14'}
     cpu: [ia32]
     os: [win32]
 
-  '@depot/cli-win32-x64@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-iC8FpHij2yrO1hNQPuRYgreYsyvXgC6xaBdBpfM5x7C7Uf+vOg4k5ERToj0WCfvRhkja+uguQdw2V3il6IhNeA==}
+  '@depot/cli-win32-x64@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-9CRcc7D0/x4UrBkDuc35WVPMQG5gKMD1JckGLEl6VREE0Ppdny6n+hunQ8prwVc8aqzKG134XCC2U4DUjYg18A==}
     engines: {node: '>=14'}
     cpu: [x64]
     os: [win32]
 
-  '@depot/cli@0.0.1-cli.2.73.0':
-    resolution: {integrity: sha512-pu5SKOj95jzCPG5H5SZvAN6Z+h4ACcjs6shv7S1lXqSGxNBVTvq7LlTiBFGpLcLo+EkSfbEjAdlNBdh1LRqrKA==}
+  '@depot/cli@0.0.1-cli.2.80.0':
+    resolution: {integrity: sha512-KvmOiQdpbamFziqnzzgqBm6RjfGhLJimBBYEOVriTxCPtVJuBIFm34xZllM36OQzPZIWpWBP+2/UnOyRG5smUg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -1031,6 +1031,11 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
+  '@rollup/rollup-darwin-arm64@4.34.3':
+    resolution: {integrity: sha512-fqbrykX4mGV3DlCDXhF4OaMGcchd2tmLYxVt3On5oOZWVDFfdEoYAV2alzNChl8OzNaeMAGqm1f7gk7eIw/uDg==}
+    cpu: [arm64]
+    os: [darwin]
+
   '@rollup/rollup-darwin-x64@4.29.1':
     resolution: {integrity: sha512-j/Ej1oanzPjmN0tirRd5K2/nncAhS9W6ICzgxV+9Y5ZsP0hiGhHJXZ2JQ53iSSjj8m6cRY6oB1GMzNn2EUt6Ng==}
     cpu: [x64]
@@ -1117,16 +1122,16 @@ packages:
   '@socket.io/component-emitter@3.1.2':
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
-  '@trigger.dev/build@3.3.7':
-    resolution: {integrity: sha512-WtbcnHUpIyHziOcUOyjgqFtEGQBtRg5UDVJEywyhuKdifsRP5I+JOIxD4kDY1ShLPwhaS/0EGV+MUisdLY13Rw==}
+  '@trigger.dev/build@3.3.13':
+    resolution: {integrity: sha512-2R7FTvo/3XYhc+uB4vm2mzuH5UTP7kq4E9T2jEBQMEfz4KbiIjQwWtak366ApPKYRbBU1+xm0Mfx4EWtAriWhA==}
     engines: {node: '>=18.20.0'}
 
-  '@trigger.dev/core@3.3.7':
-    resolution: {integrity: sha512-K5mAYXYbhSi8TP57VorfTlbNcbR4WIhUfjCsuSwL5tl6rVIM88ZJDdTN034XlZBh0FhAKIIIp8MUG1wt3bRjkA==}
+  '@trigger.dev/core@3.3.13':
+    resolution: {integrity: sha512-3VU4YMS+RVCkfVXeUKSWlkVszgFK44tIknR9sHLYgetI714L3tgH47XBXJ3+/ZV5Y9Vvv6O6pRIuV7EEhzbexg==}
     engines: {node: '>=18.20.0'}
 
-  '@trigger.dev/sdk@3.3.7':
-    resolution: {integrity: sha512-PoEp6BMuC2UA6s8AgBaBth8w0GEgKvGfdbGPb5hxuUojm0ejSkQ9pFTNaV/R0l4FyfHzc1sTrC06GQuBXnoA8g==}
+  '@trigger.dev/sdk@3.3.13':
+    resolution: {integrity: sha512-iXtHMnzvzmPfBk7+whpWOElBJt6viCoA3r8xgrrrurj8oxjIVe4UvdDiB7wbUJJ44WROWEb0wVKyQut1L/FwQQ==}
     engines: {node: '>=18.20.0'}
     peerDependencies:
       zod: ^3.0.0
@@ -1551,6 +1556,10 @@ packages:
     resolution: {integrity: sha512-T1C0XCUimhxVQzW4zFipdx0SficT651NnkR0ZSH3yQwh+mFMdLfgjABVi4YtMTtaL4s168593DaoaRLMqryavA==}
     engines: {node: '>=18.0.0'}
 
+  eventsource@3.0.5:
+    resolution: {integrity: sha512-LT/5J605bx5SNyE+ITBDiM3FxffBiq9un7Vx0EwMDM3vg8sWKx/tO2zC+LMqZ+smAM0F2hblaDZUVZF0te2pSw==}
+    engines: {node: '>=18.0.0'}
+
   evt@2.5.8:
     resolution: {integrity: sha512-wjurRtEqepH03fZSzkCUAw2tNNtEoeoEYXf7EqG8uU52wQ3D/+ctyQE8hf+YR/5DXZlwl2jNGLMm4hAd/wyD6g==}
 
@@ -1565,8 +1574,8 @@ packages:
   fast-npm-meta@0.2.2:
     resolution: {integrity: sha512-E+fdxeaOQGo/CMWc9f4uHFfgUPJRAu7N3uB8GBvB3SDPAIWJK4GKyYhkAGFq+GYrcbKNfQIz5VVQyJnDuPPCrg==}
 
-  fdir@6.4.2:
-    resolution: {integrity: sha512-KnhMXsKSPZlAhp7+IjUkRZKPb4fUyccpDrdFXbi4QL1qkmFh9kVY09Yox+n4MaOb3lHZ1Tv829C3oaaXoMYPDQ==}
+  fdir@6.4.3:
+    resolution: {integrity: sha512-PMXmW2y1hDDfTSRc9gaXIuCCRpuoz3Kaz8cUelp3smouvfT632ozg2vrT6lJsHKKOF59YLbOGfAWGUcKEfRMQw==}
     peerDependencies:
       picomatch: ^3 || ^4
     peerDependenciesMeta:
@@ -2183,8 +2192,8 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  trigger.dev@3.3.7:
-    resolution: {integrity: sha512-Mwb37DsBenS+aP+DzujIBeLKbS1ffoTSnjZYCu/Go9D+zRE7mgfL1qRg3x50SbmDmQFrSXxmPt8Xen0J39ywWw==}
+  trigger.dev@3.3.13:
+    resolution: {integrity: sha512-1IAaZlB5XzYOrZ+1S6nyJyoTuO1VovItXEl8b094keIJXYyEAdf2y0//GNApTFeZcDV+cPohgKTJxP7AEitOcA==}
     engines: {node: '>=18.20.0'}
     hasBin: true
 
@@ -2444,50 +2453,50 @@ snapshots:
   '@colors/colors@1.5.0':
     optional: true
 
-  '@depot/cli-darwin-arm64@0.0.1-cli.2.73.0':
+  '@depot/cli-darwin-arm64@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli-darwin-x64@0.0.1-cli.2.73.0':
+  '@depot/cli-darwin-x64@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli-linux-arm64@0.0.1-cli.2.73.0':
+  '@depot/cli-linux-arm64@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli-linux-arm@0.0.1-cli.2.73.0':
+  '@depot/cli-linux-arm@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli-linux-ia32@0.0.1-cli.2.73.0':
+  '@depot/cli-linux-ia32@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli-linux-x64@0.0.1-cli.2.73.0':
+  '@depot/cli-linux-x64@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli-win32-arm64@0.0.1-cli.2.73.0':
+  '@depot/cli-win32-arm64@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli-win32-ia32@0.0.1-cli.2.73.0':
+  '@depot/cli-win32-ia32@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli-win32-x64@0.0.1-cli.2.73.0':
+  '@depot/cli-win32-x64@0.0.1-cli.2.80.0':
     optional: true
 
-  '@depot/cli@0.0.1-cli.2.73.0':
+  '@depot/cli@0.0.1-cli.2.80.0':
     optionalDependencies:
-      '@depot/cli-darwin-arm64': 0.0.1-cli.2.73.0
-      '@depot/cli-darwin-x64': 0.0.1-cli.2.73.0
-      '@depot/cli-linux-arm': 0.0.1-cli.2.73.0
-      '@depot/cli-linux-arm64': 0.0.1-cli.2.73.0
-      '@depot/cli-linux-ia32': 0.0.1-cli.2.73.0
-      '@depot/cli-linux-x64': 0.0.1-cli.2.73.0
-      '@depot/cli-win32-arm64': 0.0.1-cli.2.73.0
-      '@depot/cli-win32-ia32': 0.0.1-cli.2.73.0
-      '@depot/cli-win32-x64': 0.0.1-cli.2.73.0
+      '@depot/cli-darwin-arm64': 0.0.1-cli.2.80.0
+      '@depot/cli-darwin-x64': 0.0.1-cli.2.80.0
+      '@depot/cli-linux-arm': 0.0.1-cli.2.80.0
+      '@depot/cli-linux-arm64': 0.0.1-cli.2.80.0
+      '@depot/cli-linux-ia32': 0.0.1-cli.2.80.0
+      '@depot/cli-linux-x64': 0.0.1-cli.2.80.0
+      '@depot/cli-win32-arm64': 0.0.1-cli.2.80.0
+      '@depot/cli-win32-ia32': 0.0.1-cli.2.80.0
+      '@depot/cli-win32-x64': 0.0.1-cli.2.80.0
 
   '@drizzle-team/brocli@0.10.2': {}
 
   '@electric-sql/client@1.0.0-beta.1':
     optionalDependencies:
-      '@rollup/rollup-darwin-arm64': 4.29.1
+      '@rollup/rollup-darwin-arm64': 4.34.3
 
   '@esbuild-kit/core-utils@3.3.2':
     dependencies:
@@ -3048,6 +3057,9 @@ snapshots:
   '@rollup/rollup-darwin-arm64@4.29.1':
     optional: true
 
+  '@rollup/rollup-darwin-arm64@4.34.3':
+    optional: true
+
   '@rollup/rollup-darwin-x64@4.29.1':
     optional: true
 
@@ -3132,9 +3144,9 @@ snapshots:
 
   '@socket.io/component-emitter@3.1.2': {}
 
-  '@trigger.dev/build@3.3.7':
+  '@trigger.dev/build@3.3.13':
     dependencies:
-      '@trigger.dev/core': 3.3.7
+      '@trigger.dev/core': 3.3.13
       pkg-types: 1.2.1
       tinyglobby: 0.2.10
       tsconfck: 3.1.3
@@ -3144,7 +3156,7 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@trigger.dev/core@3.3.7':
+  '@trigger.dev/core@3.3.13':
     dependencies:
       '@electric-sql/client': 1.0.0-beta.1
       '@google-cloud/precise-date': 4.0.0
@@ -3161,6 +3173,7 @@ snapshots:
       '@opentelemetry/sdk-trace-node': 1.25.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.25.1
       dequal: 2.0.3
+      eventsource: 3.0.5
       eventsource-parser: 3.0.0
       execa: 8.0.1
       humanize-duration: 3.32.1
@@ -3176,12 +3189,12 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@trigger.dev/sdk@3.3.7(zod@3.23.8)':
+  '@trigger.dev/sdk@3.3.13(zod@3.23.8)':
     dependencies:
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.52.1
       '@opentelemetry/semantic-conventions': 1.25.1
-      '@trigger.dev/core': 3.3.7
+      '@trigger.dev/core': 3.3.13
       chalk: 5.4.0
       cronstrue: 2.52.0
       debug: 4.4.0
@@ -3617,6 +3630,10 @@ snapshots:
 
   eventsource-parser@3.0.0: {}
 
+  eventsource@3.0.5:
+    dependencies:
+      eventsource-parser: 3.0.0
+
   evt@2.5.8:
     dependencies:
       minimal-polyfills: 2.2.3
@@ -3639,7 +3656,7 @@ snapshots:
 
   fast-npm-meta@0.2.2: {}
 
-  fdir@6.4.2(picomatch@4.0.2):
+  fdir@6.4.3(picomatch@4.0.2):
     optionalDependencies:
       picomatch: 4.0.2
 
@@ -4220,7 +4237,7 @@ snapshots:
 
   tinyglobby@0.2.10:
     dependencies:
-      fdir: 6.4.2(picomatch@4.0.2)
+      fdir: 6.4.3(picomatch@4.0.2)
       picomatch: 4.0.2
 
   tinygradient@1.1.5:
@@ -4238,10 +4255,10 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  trigger.dev@3.3.7:
+  trigger.dev@3.3.13:
     dependencies:
       '@clack/prompts': 0.7.0
-      '@depot/cli': 0.0.1-cli.2.73.0
+      '@depot/cli': 0.0.1-cli.2.80.0
       '@opentelemetry/api': 1.9.0
       '@opentelemetry/api-logs': 0.52.1
       '@opentelemetry/exporter-logs-otlp-http': 0.52.1(@opentelemetry/api@1.9.0)
@@ -4254,10 +4271,11 @@ snapshots:
       '@opentelemetry/sdk-trace-base': 1.25.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/sdk-trace-node': 1.25.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/semantic-conventions': 1.25.1
-      '@trigger.dev/build': 3.3.7
-      '@trigger.dev/core': 3.3.7
+      '@trigger.dev/build': 3.3.13
+      '@trigger.dev/core': 3.3.13
       c12: 1.11.2(magicast@0.3.5)
       chalk: 5.4.0
+      chokidar: 3.6.0
       cli-table3: 0.6.5
       commander: 9.5.0
       defu: 6.1.4
@@ -4286,6 +4304,7 @@ snapshots:
       terminal-link: 3.0.0
       tiny-invariant: 1.3.3
       tinyexec: 0.3.1
+      tinyglobby: 0.2.10
       ws: 8.18.0
       xdg-app-paths: 8.3.0
       zod: 3.23.8
