@@ -30,7 +30,6 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_TOKEN }}" >> .npmrc  # Add auth token to .npmrc
           pnpm install
       - name: Run tests
         run: pnpm test
