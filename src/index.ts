@@ -1,3 +1,4 @@
+import { updateCOEPQP } from "@/lib/updateCOEPQP";
 import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
 import { showRoutes } from "hono/dev";
@@ -19,6 +20,11 @@ app.post("/process-cars-data", async (c) => {
 
 app.post("/process-coe-data", async (c) => {
   const response = await updateCOE();
+  return c.json(response);
+});
+
+app.post("/process-coe-pqp-data", async (c) => {
+  const response = await updateCOEPQP();
   return c.json(response);
 });
 
