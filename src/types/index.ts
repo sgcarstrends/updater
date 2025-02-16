@@ -16,3 +16,9 @@ export interface COE {
   bids_received: number;
   premium: number;
 }
+
+export interface PQP {
+  month: string;
+  vehicle_class: string;
+  pqp: number;
+}

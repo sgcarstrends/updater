@@ -1,7 +1,7 @@
 import { AWS_LAMBDA_TEMP_DIR } from "@/config";
 import AdmZip from "adm-zip";
 
-export const downloadFile = async (url: string) => {
+export const downloadFile = async (url: string, csvFile?: string) => {
   try {
     const response = await fetch(url);
 
@@ -9,26 +9,21 @@ export const downloadFile = async (url: string) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Get the ArrayBuffer from the response
     const arrayBuffer = await response.arrayBuffer();
-
-    // Create a new zip instance from the downloaded data
     const zip = new AdmZip(Buffer.from(arrayBuffer));
+    const fileNames: string[] = [];
 
-    // Get the first non-directory entry
-    const entry = zip.getEntries().find((entry) => !entry.isDirectory);
-    if (!entry) {
-      throw new Error("No file found in ZIP archive");
+    for (const entry of zip.getEntries()) {
+      if (!entry.isDirectory) {
+        console.log("Found file in ZIP:", entry.entryName);
+        fileNames.push(entry.entryName);
+
+        // Extract to file system with full path
+        zip.extractEntryTo(entry, AWS_LAMBDA_TEMP_DIR, true, true);
+      }
     }
 
-    // Log the found filename
-    console.log("Found file in ZIP:", entry.entryName);
-
-    // Extract the ZIP contents to temp directory
-    zip.extractEntryTo(entry.entryName, AWS_LAMBDA_TEMP_DIR, true, true);
-
-    // Return the path to the extracted CSV file
-    return entry.entryName;
+    return fileNames.find((name) => name.includes(csvFile)) || fileNames[0];
   } catch (error) {
     console.error("Error downloading or extracting file:", error);
     throw error;

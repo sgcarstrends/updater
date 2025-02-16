@@ -11,6 +11,7 @@ import { type Table, getTableName } from "drizzle-orm";
 export interface UpdaterConfig<T> {
   table: Table;
   url: string;
+  csvFile?: string;
   keyFields: string[];
   csvTransformOptions?: CSVTransformOptions<T>;
 }
@@ -27,6 +28,7 @@ const BATCH_SIZE = 5000;
 export const updater = async <T>({
   table,
   url,
+  csvFile,
   keyFields,
   csvTransformOptions = {},
 }: UpdaterConfig<T>): Promise<UpdaterResult> => {
@@ -34,7 +36,7 @@ export const updater = async <T>({
     const tableName = getTableName(table);
 
     // Download and extract file
-    const extractedFileName = await downloadFile(url);
+    const extractedFileName = await downloadFile(url, csvFile);
     const destinationPath = path.join(AWS_LAMBDA_TEMP_DIR, extractedFileName);
     console.log("Destination path:", destinationPath);
 
