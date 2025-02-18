@@ -1,7 +1,9 @@
 import { updateCOEPQP } from "@/lib/updateCOEPQP";
 import { Hono } from "hono";
 import { handle } from "hono/aws-lambda";
+import { bearerAuth } from "hono/bearer-auth";
 import { showRoutes } from "hono/dev";
+import { Resource } from "sst";
 import { updateCOE } from "./lib/updateCOE";
 import { updateCars } from "./lib/updateCars";
 
@@ -18,6 +20,8 @@ app.get("/", async (c) => {
     },
   });
 });
+
+app.use("/process/*", bearerAuth({ token: Resource.UPDATER_API_TOKEN.value }));
 
 app.post("/process/cars", async (c) => {
   const response = await updateCars();

@@ -1,5 +1,12 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
+const DOMAIN_NAME = "sgcarstrends.com";
+const DOMAINS = {
+  dev: `dev.updater.${DOMAIN_NAME}`,
+  staging: `staging.updater.${DOMAIN_NAME}`,
+  prod: `updater.${DOMAIN_NAME}`,
+};
+
 export default $config({
   app(input) {
     return {
@@ -10,35 +17,36 @@ export default $config({
         aws: {
           region: "ap-southeast-1",
         },
+        cloudflare: true,
       },
     };
   },
   async run() {
-    const environment = {
-      DATABASE_URL: process.env.DATABASE_URL,
-      UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
-      UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
-    };
+    const SECRET_KEYS = [
+      "UPDATER_API_TOKEN",
+      "DATABASE_URL",
+      "UPSTASH_REDIS_REST_URL",
+      "UPSTASH_REDIS_REST_TOKEN",
+    ] as const;
+    const secrets = Object.fromEntries(
+      SECRET_KEYS.map((key) => [key, new sst.Secret(key, process.env[key])]),
+    );
+    const allSecrets = Object.values(secrets);
 
-    // TODO: Temporary remove Secrets
-    // const DATABASE_URL = new sst.Secret(
-    //   "DATABASE_URL",
-    //   environment.DATABASE_URL,
-    // );
-    // const UPSTASH_REDIS_REST_URL = new sst.Secret(
-    //   "UPSTASH_REDIS_REST_URL",
-    //   environment.UPSTASH_REDIS_REST_URL,
-    // );
-    // const UPSTASH_REDIS_REST_TOKEN = new sst.Secret(
-    //   "UPSTASH_REDIS_REST_TOKEN",
-    //   environment.UPSTASH_REDIS_REST_TOKEN,
-    // );
-
-    // TODO: Might create an API in the future
-    new sst.aws.Function("Updater", {
+    const { url } = new sst.aws.Function("Updater", {
+      link: [...allSecrets],
       handler: "src/index.handler",
-      environment,
       url: true,
+    });
+
+    new sst.aws.Router("SGCarsTrendsUpdater", {
+      domain: {
+        name: DOMAINS[$app.stage],
+        dns: sst.cloudflare.dns(),
+      },
+      routes: {
+        "/*": url,
+      },
     });
   },
 });
