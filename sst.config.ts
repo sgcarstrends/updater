@@ -23,6 +23,7 @@ export default $config({
   },
   async run() {
     const SECRET_KEYS = [
+      "API_TOKEN",
       "DATABASE_URL",
       "UPSTASH_REDIS_REST_URL",
       "UPSTASH_REDIS_REST_TOKEN",
