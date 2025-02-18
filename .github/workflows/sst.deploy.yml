@@ -13,7 +13,7 @@ on:
       UPDATER_API_TOKEN:
         required: true
       CLOUDFLARE_API_TOKEN:
-      required: true
+        required: true
       DATABASE_URL:
         required: true
       UPSTASH_REDIS_REST_URL:
