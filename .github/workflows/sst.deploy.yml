@@ -10,8 +10,10 @@ on:
         required: true
         type: string
     secrets:
-      CLOUDFLARE_API_TOKEN:
+      UPDATER_API_TOKEN:
         required: true
+      CLOUDFLARE_API_TOKEN:
+      required: true
       DATABASE_URL:
         required: true
       UPSTASH_REDIS_REST_URL:
@@ -28,6 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     env:
+      UPDATER_API_TOKEN: ${{ secrets.UPDATER_API_TOKEN }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}

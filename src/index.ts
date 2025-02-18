@@ -21,7 +21,7 @@ app.get("/", async (c) => {
   });
 });
 
-app.use("/process/*", bearerAuth({ token: Resource.API_TOKEN.value }));
+app.use("/process/*", bearerAuth({ token: Resource.UPDATER_API_TOKEN.value }));
 
 app.post("/process/cars", async (c) => {
   const response = await updateCars();
