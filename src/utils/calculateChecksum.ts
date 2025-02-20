@@ -31,7 +31,7 @@ export const calculateChecksum = async (filePath: string): Promise<string> => {
     return hash.digest("hex");
   } catch (error) {
     throw new Error(
-      `Checksum calculation failed: ${error instanceof Error ? error.message : error}`,
+      `Checksum calculation failed for ${filePath}: ${error.message}`,
     );
   }
 };
