@@ -3,7 +3,7 @@ import { coe } from "@/schema";
 import type { COE } from "@/types";
 import { updater } from "./updater";
 
-export const updateCOE = async () => {
+export const updateCOE = () => {
   const filename = "COE Bidding Results.zip";
   const CSV_FILE = "M11-coe_results.csv";
   const url = `${LTA_DATAMALL_BASE_URL}/${filename}`;
@@ -23,7 +23,7 @@ export const updateCOE = async () => {
     "bids_received",
   ];
 
-  const response = await updater<COE>({
+  return updater<COE>({
     table: coe,
     url,
     csvFile: CSV_FILE,
@@ -34,9 +34,6 @@ export const updateCOE = async () => {
       ),
     },
   });
-  console.log("response", response);
-
-  return response;
 };
 
 export const handler = async () => {

@@ -21,6 +21,7 @@ export interface UpdaterResult {
   recordsProcessed: number;
   message: string;
   timestamp: string;
+  checksum?: string;
 }
 
 const BATCH_SIZE = 5000;
@@ -50,16 +51,20 @@ export const updater = async <T>({
 
     if (!cachedChecksum) {
       console.log("No cached checksum found. This might be the first run.");
+
       await cacheChecksum(extractedFileName, checksum);
     } else if (cachedChecksum === checksum) {
-      console.log(
-        `File have not been changed since the last update. Checksum: ${checksum}`,
-      );
+      const timestamp = new Date().toISOString();
+      const message = `File has not changed since last update (Checksum: ${checksum})`;
+
+      console.log(message);
+
       return {
         table: tableName,
         recordsProcessed: 0,
-        message: `File have not been changed since the last update. Checksum: ${checksum}`,
-        timestamp: new Date().toISOString(),
+        message,
+        timestamp,
+        checksum,
       };
     }
 
@@ -117,12 +122,15 @@ export const updater = async <T>({
 
     await cacheChecksum(extractedFileName, checksum);
 
-    return {
+    const response = {
       table: tableName,
       recordsProcessed: totalInserted,
       message: `${totalInserted} record(s) inserted in ${Math.round(end - start)}ms`,
       timestamp: new Date().toISOString(),
     };
+    console.log(response);
+
+    return response;
   } catch (e) {
     console.error("Error in updater:", e);
     throw e;

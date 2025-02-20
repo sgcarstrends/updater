@@ -4,7 +4,7 @@ import type { Car } from "@/types";
 import { cleanSpecialChars } from "@/utils/cleanSpecialChars";
 import { updater } from "./updater";
 
-export const updateCars = async () => {
+export const updateCars = () => {
   const filename = "Monthly New Registration of Cars by Make.zip";
   const url = `${LTA_DATAMALL_BASE_URL}/${filename}`;
   const keyFields: Array<keyof Car> = [
@@ -14,7 +14,7 @@ export const updateCars = async () => {
     "vehicle_type",
   ];
 
-  const response = await updater<Car>({
+  return updater<Car>({
     table: cars,
     url,
     keyFields,
@@ -28,9 +28,6 @@ export const updateCars = async () => {
       },
     },
   });
-  console.log("response", response);
-
-  return response;
 };
 
 export const handler = async () => {
